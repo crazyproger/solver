@@ -1,0 +1,26 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib" />
+      <root url="file://$PROJECT_DIR$/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/lib" />
+      <root url="file://$PROJECT_DIR$/lib" />
+      <root url="file:///var/tmp/symja-read-only/jsyntaxpane/src/main/java" />
+      <root url="file:///var/tmp/symja-read-only/symja.ajax/src" />
+      <root url="file:///var/tmp/symja-read-only/jas/src/main/java" />
+      <root url="file:///var/tmp/symja-read-only/matheclipse-parser/src/test/java" />
+      <root url="file:///var/tmp/symja-read-only/matheclipse-parser/src/main/java" />
+      <root url="file:///var/tmp/symja-read-only/symja-gui/src/main/java" />
+      <root url="file:///var/tmp/symja-read-only/surfaceplotter/src" />
+      <root url="file:///var/tmp/symja-read-only/matheclipse-generic/src/main/java" />
+      <root url="file:///var/tmp/symja-read-only/matheclipse-core/src/test/java" />
+      <root url="file:///var/tmp/symja-read-only/matheclipse-core/src/main/java" />
+      <root url="file:///var/tmp/symja-read-only/commons-math/src/main/java" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>
