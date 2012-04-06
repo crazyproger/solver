@@ -10,9 +10,10 @@ import org.matheclipse.core.interfaces.IExpr;
 public class SymjaTest {
     public static void main(String[] args) {
 //        someExample();
-        integration();
-//        differentiation("D[(10 x^2 - 63 x + 29)/(x^3 - 11 x^2 + 40 x -48),x]");
-//        differentiation("D[Sin[x],x]");
+//        integration();
+//        solveExpr("D[(10 x^2 - 63 x + 29)/(x^3 - 11 x^2 + 40 x -48),x]");
+        solveExpr("D[Sin[pi]+Cos[y],pi]");
+//        solveExpr("D[Cos[x]^2,x]");
     }
 
     private static void someExample() {
@@ -27,7 +28,7 @@ public class SymjaTest {
         try {
             StringBufferWriter buf = new StringBufferWriter();
             String input = "Expand[(20*x-63)*(x^3-11*x^2+40*x-48)^(-1)-(10*x^2-63*x+29)*(3*x^2-22*x+40)*(x^3-11*x^2+40*x-48)^(-2)]";
-            result = util.evalStepByStep(input);
+            result = util.evaluate(input);
             OutputFormFactory.get().convert(buf, result);
             String output = buf.toString();
             System.out.println("Expanded form for " + input + " is " + output);
@@ -45,7 +46,7 @@ public class SymjaTest {
 
             buf = new StringBufferWriter();
             input = "Factor[" + output + "]";
-            result = util.evalStepByStep(input);
+            result = util.evaluate(input);
             OutputFormFactory.get().convert(buf, result);
             output = buf.toString();
             System.out.println("Factored form for " + input + " is " + output);
@@ -57,7 +58,7 @@ public class SymjaTest {
         }
     }
 
-    private static void differentiation(String expr) {
+    private static void solveExpr(String expr) {
                 // Static initialization of the MathEclipse engine instead of null
         // you can set a file name to overload the default initial
         // rules. This step should be called only once at program setup:
@@ -69,7 +70,7 @@ public class SymjaTest {
         try {
             StringBufferWriter buf = new StringBufferWriter();
             String input = expr;
-            result = util.evalStepByStep(input);
+            result = util.evaluate(input);
             OutputFormFactory.get().convert(buf, result);
             String output = buf.toString();
             System.out.println("Differentiate form for " + input + " is " + output);
@@ -94,8 +95,7 @@ public class SymjaTest {
         try {
             StringBufferWriter buf = new StringBufferWriter();
             String input = "Integrate[(10 x^2 - 63 x + 29)/(x^3 - 11 x^2 + 40 x -48),x]";
-            result = util.evalStepByStep(input);
-            IAST traceList = engine.getTraceList();
+            result = util.evaluate(input);
             OutputFormFactory.get().convert(buf, result);
             String output = buf.toString();
             System.out.println("Integrated form for " + input + " is " + output);

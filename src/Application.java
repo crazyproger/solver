@@ -11,6 +11,22 @@ public class Application {
     private JTextArea textArea3;
     private JTextArea textArea4;
     private JPanel rootPanel;
+    private JButton θButton;
+    private JButton ψButton;
+    private JButton φButton;
+    private JButton πButton;
+    private JButton ωButton;
+    private JButton ρButton;
+    private JButton button11;
+    private JButton button12;
+    private JButton button13;
+    private JButton button14;
+    private JButton button15;
+    private JButton button16;
+    private JButton button17;
+    private JButton sqrtButton;
+    private JButton integralButton;
+    private JButton button1;
 
     public Application() {
         bExit.addActionListener(new ActionListener() {
@@ -28,6 +44,8 @@ public class Application {
     }
 
     private void calculate() {
+        taResult.setText("");
+
         // todo make
     }
 
