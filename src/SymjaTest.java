@@ -10,11 +10,13 @@ import org.matheclipse.core.interfaces.IExpr;
 public class SymjaTest {
     public static void main(String[] args) {
 //        someExample();
-        integration();
+//        integration();
 //        solveExpr("D[(10 x^2 - 63 x + 29)/(x^3 - 11 x^2 + 40 x -48),x]");
 //        solveExpr("Sum[D[(b[t]/i)*Cos[i*Q],t],{i,1,N}]");
 //        solveExpr("D[(b[t]/i)*Cos[i*Q],t]");
 //        solveExpr("D[Cos[x]^2,x]");
+        solveExpr("Simplify[1/2*Y*(-4*M*i^(-1)*p*Cos[Q*i]*YY*Sin[Q*i]*YYY+4*M^2*p*r*Sin[Q*i]*YYY+4*M*p*YY*Sin[Q*i]^2*YYY+4*M*p*r*YY*Sin[Q*i]+2*M^2*p*Sin[Q*i]^2*YYY^2+2*M^2*i^(-2)*p*Cos[Q*i]^2*YYY^2+4*p*YY^2*Sin[Q*i]^2+2*M^2*p*r^2)]");
+//        solveExpr("2*M^2*YYY^2*p*Sin[Q*i]^2+4*M*YY*YYY*p*Sin[Q*i]^2+4*YY^2*p*Sin[Q*i]^2+2*M^2*YYY^2*i^(-2)*p*Cos[Q*i]^2+2*M^2*p*r^2)");
     }
 
     private static void someExample() {
@@ -74,7 +76,7 @@ public class SymjaTest {
             result = util.evaluate(input);
             OutputFormFactory.get().convert(buf, result);
             String output = buf.toString();
-            System.out.println("Differentiate form for " + input + " is " + output);
+            System.out.println("SolveExpr form for " + input + " is " + output);
         } catch (final Exception e) {
             e.printStackTrace();
         } finally {
