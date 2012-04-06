@@ -10,9 +10,10 @@ import org.matheclipse.core.interfaces.IExpr;
 public class SymjaTest {
     public static void main(String[] args) {
 //        someExample();
-//        integration();
+        integration();
 //        solveExpr("D[(10 x^2 - 63 x + 29)/(x^3 - 11 x^2 + 40 x -48),x]");
-        solveExpr("D[Sin[pi]+Cos[y],pi]");
+//        solveExpr("Sum[D[(b[t]/i)*Cos[i*Q],t],{i,1,N}]");
+//        solveExpr("D[(b[t]/i)*Cos[i*Q],t]");
 //        solveExpr("D[Cos[x]^2,x]");
     }
 
@@ -94,7 +95,8 @@ public class SymjaTest {
 
         try {
             StringBufferWriter buf = new StringBufferWriter();
-            String input = "Integrate[(10 x^2 - 63 x + 29)/(x^3 - 11 x^2 + 40 x -48),x]";
+//            String input = "Integrate[(10 x^2 - 63 x + 29)/(x^3 - 11 x^2 + 40 x -48),{x, p,2*p}]";
+            String input = "(Y/2)* Integrate[((D[b[t],t] +M*r+M*d[t])^2+(D[d[t],t]-M*b[t])^2),{O, 0 ,2*p}]";
             result = util.evaluate(input);
             OutputFormFactory.get().convert(buf, result);
             String output = buf.toString();

@@ -7,9 +7,9 @@ public class Application {
     private JButton bExit;
     private JButton bCalculate;
     private JTextArea taResult;
-    private JTextArea textArea2;
-    private JTextArea textArea3;
-    private JTextArea textArea4;
+    private JTextArea taV;
+    private JTextArea taU;
+    private JTextArea y2IntegrateDTextArea;
     private JPanel rootPanel;
     private JButton θButton;
     private JButton ψButton;
