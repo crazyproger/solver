@@ -87,14 +87,14 @@
               </scrollpane>
             </children>
           </grid>
-          <component id="d9927" class="javax.swing.JTextArea" binding="y2IntegrateDTextArea" default-binding="true">
+          <component id="d9927" class="javax.swing.JTextArea" binding="taT">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
               </grid>
             </constraints>
             <properties>
-              <text value="(Y/2)* Integrate[((D[V,t] +M*r+M*U)^2+(D[U,t]-M*V)^2,{O, 0 ,2*p}]"/>
+              <text value="(Y/2)* Integrate[((D[V,t] +M*r+M*U)^2+(D[U,t]-M*V)^2),{O, 0 ,2*p}]"/>
             </properties>
           </component>
           <component id="e2c14" class="javax.swing.JTextArea" binding="taV">
@@ -104,7 +104,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="(b[t]/i)*Cos[i*Q]"/>
+              <text value="Sum(i,1,N)(b[t]/i)*Cos[i*Q]"/>
             </properties>
           </component>
           <component id="42bd6" class="javax.swing.JTextArea" binding="taU">
@@ -114,7 +114,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="b[t]*Sin[i*Q]"/>
+              <text value="Sum(i,1,N)b[t]*Sin[i*Q]"/>
             </properties>
           </component>
           <component id="fc9d4" class="javax.swing.JLabel">
@@ -131,6 +131,14 @@
             </constraints>
             <properties>
               <text value="U="/>
+            </properties>
+          </component>
+          <component id="c1c4c" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="T="/>
             </properties>
           </component>
         </children>

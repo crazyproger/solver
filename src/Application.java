@@ -1,3 +1,10 @@
+import edu.jas.kern.ComputerThreads;
+import org.matheclipse.core.eval.EvalUtilities;
+import org.matheclipse.core.expression.F;
+import org.matheclipse.core.form.output.OutputFormFactory;
+import org.matheclipse.core.form.output.StringBufferWriter;
+import org.matheclipse.core.interfaces.IExpr;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +16,7 @@ public class Application {
     private JTextArea taResult;
     private JTextArea taV;
     private JTextArea taU;
-    private JTextArea y2IntegrateDTextArea;
+    private JTextArea taT;
     private JPanel rootPanel;
     private JButton θButton;
     private JButton ψButton;
@@ -46,8 +53,56 @@ public class Application {
     private void calculate() {
         taResult.setText("");
 
-        // todo make
+        String uText = taU.getText();
+        String vText = taV.getText();
+        String master = taT.getText();
+        String sumStr = "Sum(i,1,N)";
+        boolean wasSum = false;
+        if (uText.startsWith(sumStr)) {
+            wasSum = true;
+            uText = uText.substring(sumStr.length());
+            vText = vText.substring(sumStr.length());
+        }
+        String firstDU = solveExpr("D["+uText+",t]");
+        System.out.println("firstDU = " + firstDU);
+        String firstDV = solveExpr("D["+uText+",t]");
+        System.out.println("firstDV = " + firstDV);
+
+        System.out.println("master before replace = " + master);
+        master = master.replaceAll("D\\[V,t\\]","("+firstDV+")");
+        master = master.replaceAll("D\\[U,t\\]","("+firstDU+")");
+        System.out.println("master after D replace = " + master);
+        master = master.replaceAll("V","("+vText+")");
+        master = master.replaceAll("U","("+uText+")" );
+        System.out.println("master after all replace = " + master);
+        String result = solveExpr(master);
+        result = result.replaceAll("D\\[b\\[t\\],t\\]", "b`");
+        taResult.setText(result);
     }
+    private static String  solveExpr(String input) {
+                    // Static initialization of the MathEclipse engine instead of null
+            // you can set a file name to overload the default initial
+            // rules. This step should be called only once at program setup:
+            F.initSymbols(null);
+            EvalUtilities util = new EvalUtilities();
+
+            IExpr result;
+
+            try {
+                StringBufferWriter buf = new StringBufferWriter();
+                result = util.evaluate(input);
+                OutputFormFactory.get().convert(buf, result);
+                String output = buf.toString();
+                System.out.println("Differentiate form for " + input + " is " + output);
+                return output;
+            } catch (final Exception e) {
+                e.printStackTrace();
+                return "ERROR";
+            } finally {
+                // Call terminate() only one time at the end of the program
+                ComputerThreads.terminate();
+            }
+        }
 
     public JPanel getRootPanel() {
         return rootPanel;
