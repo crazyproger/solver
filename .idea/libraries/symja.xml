@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="symja">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/symja/lib/batik-dom-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/stix-fonts-1.0-beta-2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/google-collect-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/junit-4.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/log4j-1.2.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/batik-ext-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/guava-11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/batik-xml-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/jsr305.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/batik-util-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/jnlp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/xmlgraphics-commons-1.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/jeuclid-core-3.1.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/lib/commons-io-1.3.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,26 @@
+<component name="libraryTable">
+  <library name="symja.ajax">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/jsr107cache-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/appengine-api-1.0-sdk-1.5.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/meconsole013.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/gwt-servlet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/geronimo-jpa_3.0_spec-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/datanucleus-appengine-1.0.8.final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/jsr305.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/log4j-1.2.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/gwt-user-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/jdo2-api-2.3-eb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/guava-11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/datanucleus-jpa-1.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/objectify-3.0-retro.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/appengine-jsr107cache-1.5.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/datanucleus-core-1.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/appengine-api-labs-1.5.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

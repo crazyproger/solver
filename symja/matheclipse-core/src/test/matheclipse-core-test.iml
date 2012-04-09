@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/java" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="symja.ajax" level="project" />
+    <orderEntry type="library" name="symja" level="project" />
+    <orderEntry type="module" module-name="matheclipse-parser" />
+    <orderEntry type="module" module-name="jas" />
+    <orderEntry type="module" module-name="matheclipse-core" />
+    <orderEntry type="module" module-name="commons-math" />
+    <orderEntry type="module" module-name="matheclipse-generic" />
+  </component>
+</module>
+

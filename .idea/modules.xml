@@ -2,7 +2,18 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/symja/surfaceplotter/Surfaceplotter.iml" filepath="$PROJECT_DIR$/symja/surfaceplotter/Surfaceplotter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/symja.ajax/Symja.ajax.iml" filepath="$PROJECT_DIR$/symja/symja.ajax/Symja.ajax.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/commons-math/src/main/commons-math.iml" filepath="$PROJECT_DIR$/symja/commons-math/src/main/commons-math.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/jas/src/main/jas.iml" filepath="$PROJECT_DIR$/symja/jas/src/main/jas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/jsyntaxpane/src/main/jsyntaxpane.iml" filepath="$PROJECT_DIR$/symja/jsyntaxpane/src/main/jsyntaxpane.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/matheclipse-core.iml" filepath="$PROJECT_DIR$/symja/matheclipse-core/src/main/matheclipse-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/matheclipse-core/src/test/matheclipse-core-test.iml" filepath="$PROJECT_DIR$/symja/matheclipse-core/src/test/matheclipse-core-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/matheclipse-generic/src/main/matheclipse-generic.iml" filepath="$PROJECT_DIR$/symja/matheclipse-generic/src/main/matheclipse-generic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/matheclipse-parser/src/main/matheclipse-parser.iml" filepath="$PROJECT_DIR$/symja/matheclipse-parser/src/main/matheclipse-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/matheclipse-parser/src/test/matheclipse-parser-test.iml" filepath="$PROJECT_DIR$/symja/matheclipse-parser/src/test/matheclipse-parser-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/solver.iml" filepath="$PROJECT_DIR$/solver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/symja/symja-gui/src/main/symja-gui.iml" filepath="$PROJECT_DIR$/symja/symja-gui/src/main/symja-gui.iml" />
     </modules>
   </component>
 </project>
