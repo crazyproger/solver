@@ -1,10 +1,12 @@
 package org.matheclipse.core.eval;
 
 import java.io.Writer;
+import java.util.ListIterator;
 
 import com.google.common.base.Predicate;
 import org.matheclipse.core.basic.Config;
 import org.matheclipse.core.eval.exception.TimeExceeded;
+import org.matheclipse.core.expression.AST;
 import org.matheclipse.core.expression.F;
 import org.matheclipse.core.expression.Symbol;
 import org.matheclipse.core.form.output.OutputFormFactory;
@@ -52,19 +54,21 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
                         if (iExpr == null) {
                             return false;
                         }
-                        if (iExpr.getAt(0)!=null && iExpr.getAt(0).isSymbol()) {
-                            String  symbol = ((Symbol) iExpr.getAt(0)).getSymbol();
-                            if ("Derivative".equals(symbol) || "Function".equals(symbol)) {
+                        IExpr head = iExpr.head();
+                        if (head !=null && head.isSymbol()) {
+                            Symbol  symbol = ((Symbol) head);
+                            if (F.Derivative.isSame(symbol) || F.Function.isSame(symbol)) {
                                 return false;
                             }
                         }
-                        if (iExpr.isAST()) {
-                            return apply(iExpr.head());
+                        if (head.isAST()) {
+                            return apply(head);
                         }
                         return true;
                     }
                 };
                 fEvaluationResult = evalTrace(fParsedExpression, matcher, F.List());
+                fEvaluationResult = removeLists(fEvaluationResult);
 			} else {
 				fEvaluationResult = evaluate(fParsedExpression);
 			}
@@ -88,7 +92,17 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
 		}
 	}
 
-	/**
+    /**
+     * Удаляем списки с одной конструкцией(они не имеют смысла в выводе)
+     * @param list
+     * @return
+     */
+    private IExpr removeLists(IExpr list) {
+        // todo realize
+        return list;
+    }
+
+    /**
 	 * Runs the evaluation of the given math formula <code>String</code> in a time
 	 * limited thread
 	 * 
