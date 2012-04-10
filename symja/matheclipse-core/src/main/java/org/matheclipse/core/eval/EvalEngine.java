@@ -823,8 +823,8 @@ public class EvalEngine implements Serializable, IEvaluationEngine {
 			}
 			temp = evalObject(result);
 			if (temp != null) {
-				if (fTraceMode) { 
-					fTraceStack.addIfEmpty(expr);
+				if (fTraceMode) {
+					fTraceStack.add(expr);
 					fTraceStack.add(temp);
 				}
 				evaled = true;

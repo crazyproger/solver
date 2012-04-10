@@ -1,4 +1,5 @@
-{D[Cos[x]*Sin[y],x],
+{
+    D[Cos[x]*Sin[y],x],
     Cos[x]*D[Sin[y],x]+D[Cos[x],x]*Sin[y],
     {
         {
@@ -23,3 +24,38 @@
     -Sin[x]*Sin[y]+0,
     -Sin[x]*Sin[y]
 }
+///////////////////////////////////////////////////////////////////////////
+{
+    D[Cos[x]*Sin[y],x],
+    Cos[x]*D[Sin[y],x]+D[Cos[x],x]*Sin[y],
+    {
+        {
+            {Derivative[Cos],-Sin[#1]&},
+            {x&,-Sin[x]},
+            D[Cos[x],x],
+            -Sin[x]*D[x,x],
+            {
+                D[x,x],
+                1
+            },
+            (-1)*1*Sin[x],
+            -Sin[x]
+        },
+        D[Cos[x],x]*Sin[y],
+        -Sin[x]*Sin[y],
+        -Sin[x]*Sin[y]
+    },
+    {
+        {D[Sin[y],x],0},
+        Cos[x]*D[Sin[y],x],
+        0*Cos[x],
+        0
+    },
+    -Sin[x]*Sin[y]+0,
+    -Sin[x]*Sin[y]
+}
+
+
+
+
+
