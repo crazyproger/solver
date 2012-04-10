@@ -2,11 +2,15 @@ package org.matheclipse.core.eval;
 
 import java.io.Writer;
 
+import com.google.common.base.Predicate;
 import org.matheclipse.core.basic.Config;
 import org.matheclipse.core.eval.exception.TimeExceeded;
 import org.matheclipse.core.expression.F;
+import org.matheclipse.core.expression.Symbol;
 import org.matheclipse.core.form.output.OutputFormFactory;
 import org.matheclipse.core.interfaces.IExpr;
+
+import javax.annotation.Nullable;
 
 /**
  * Run the evaluation of a given math formula <code>String</code> in a time
@@ -42,7 +46,25 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
 		try {
 			startRequest();
 			if (fTraceEvaluation) {
-				fEvaluationResult = evalTrace(fParsedExpression, null, F.List());
+                Predicate<IExpr> matcher = new Predicate<IExpr>() {
+                    @Override
+                    public boolean apply(@Nullable IExpr iExpr) {
+                        if (iExpr == null) {
+                            return false;
+                        }
+                        if (iExpr.getAt(0)!=null && iExpr.getAt(0).isSymbol()) {
+                            String  symbol = ((Symbol) iExpr.getAt(0)).getSymbol();
+                            if ("Derivative".equals(symbol) || "Function".equals(symbol)) {
+                                return false;
+                            }
+                        }
+                        if (iExpr.isAST()) {
+                            return apply(iExpr.head());
+                        }
+                        return true;
+                    }
+                };
+                fEvaluationResult = evalTrace(fParsedExpression, matcher, F.List());
 			} else {
 				fEvaluationResult = evaluate(fParsedExpression);
 			}
