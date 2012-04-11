@@ -7,6 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="matheclipse-core" />
+    <orderEntry type="module" module-name="jas" />
   </component>
 </module>
 
