@@ -1,13 +1,16 @@
 package org.matheclipse.core.eval;
 
 import java.io.Writer;
-import java.util.ListIterator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 import com.google.common.base.Predicate;
 import org.matheclipse.core.basic.Config;
 import org.matheclipse.core.eval.exception.TimeExceeded;
 import org.matheclipse.core.expression.AST;
 import org.matheclipse.core.expression.F;
+import org.matheclipse.core.expression.IConstantHeaders;
 import org.matheclipse.core.expression.Symbol;
 import org.matheclipse.core.form.output.OutputFormFactory;
 import org.matheclipse.core.interfaces.IExpr;
@@ -68,7 +71,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
                     }
                 };
                 fEvaluationResult = evalTrace(fParsedExpression, matcher, F.List());
-                fEvaluationResult = removeLists(fEvaluationResult);
+                fEvaluationResult = removeSmallLists(fEvaluationResult);
 			} else {
 				fEvaluationResult = evaluate(fParsedExpression);
 			}
@@ -97,17 +100,45 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
      * @param list
      * @return
      */
-    private IExpr removeLists(IExpr list) {
-        // todo realize
-        return list;
+    private IExpr removeSmallLists(IExpr list) {
+        AST result = new AST();
+        if (!list.isList()) {
+            return list;
+        }
+        AST ast = (AST) list;
+        ArrayList<Integer> toDelete = new ArrayList<>();
+        for (int i = 0; i < ast.size(); i++) {
+             IExpr iExpr = ast.get(i);
+            if (iExpr.isAST()) {
+                AST el = (AST) iExpr;
+                if (el.size()==2 && el.head().equals(F.List) && !el.get(1).isList()) {
+                    toDelete.add(i);
+                }else if (el.isList()) {
+                    addToAST(result, el);
+                } else{
+                    addToAST(result, iExpr);
+                }
+            } else{
+                addToAST(result, iExpr);
+            }
+        }
+        return result;
+    }
+
+    private boolean addToAST(AST result, IExpr el) {
+        if (result.get(0)==null) {
+            result.set(0,el);
+            return true;
+        }
+        return result.add(removeSmallLists(el));
     }
 
     /**
 	 * Runs the evaluation of the given math formula <code>String</code> in a time
 	 * limited thread
-	 * 
+	 *
 	 * @param traceEvaluation
-	 * 
+	 *
 	 */
 	public IExpr constrainedEval(final Writer writer, final String inputString, boolean traceEvaluation) throws Exception {
 
@@ -130,7 +161,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
 
 	/**
 	 * Runs the evaluation of the given math expression in a time limited thread
-	 * 
+	 *
 	 */
 	public IExpr constrainedEval(final Writer writer, final IExpr inputExpression) throws Exception {
 
@@ -171,7 +202,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
 	/**
 	 * Get the parsed expression after calling the <code>constrainedEval()</code>
 	 * method
-	 * 
+	 *
 	 * @return the parsed expression; may return <ode>null</code>
 	 */
 	public IExpr getParsedExpression() {
