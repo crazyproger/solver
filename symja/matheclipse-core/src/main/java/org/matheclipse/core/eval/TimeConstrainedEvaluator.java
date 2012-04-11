@@ -114,7 +114,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
                 if (el.size()==2 && el.head().equals(F.List) && !el.get(1).isList()) {
                     toDelete.add(i);
                 }else if (el.isList()) {
-                    addToAST(result, el);
+                    addToAST(result, removeSmallLists(el));
                 } else{
                     addToAST(result, iExpr);
                 }
@@ -130,7 +130,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
             result.set(0,el);
             return true;
         }
-        return result.add(removeSmallLists(el));
+        return result.add(el);
     }
 
     /**
