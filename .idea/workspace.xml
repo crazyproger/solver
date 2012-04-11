@@ -3,16 +3,17 @@
   <component name="BookmarkManager">
     <bookmark url="file:///var/tmp/symja-read-only/symja-gui/src/main/java/org/matheclipse/symja/EvalPanel.java" line="237" />
     <bookmark url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalEngine.java" line="805" mnemonic="0" />
-    <bookmark url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" line="50" mnemonic="3" />
+    <bookmark url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" line="53" mnemonic="3" />
     <bookmark url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalUtilities.java" line="120" mnemonic="2" />
     <bookmark url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalEngine.java" line="393" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="daf96b34-b9c6-4762-8d82-e9db469b51bf" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/example2.txt" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/lib/symja-2012-04-08.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" afterPath="$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solver.iml" afterPath="$PROJECT_DIR$/solver.iml" />
     </list>
     <ignored path="solver.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,7 +45,33 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" line="56" class="org.matheclipse.core.eval.TimeConstrainedEvaluator$1" package="org.matheclipse.core.eval">
+      <breakpoint url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" line="59" class="org.matheclipse.core.eval.TimeConstrainedEvaluator$1" package="org.matheclipse.core.eval">
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" line="103" class="org.matheclipse.core.eval.TimeConstrainedEvaluator" package="org.matheclipse.core.eval">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" line="124" class="org.matheclipse.core.eval.TimeConstrainedEvaluator" package="org.matheclipse.core.eval">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -105,8 +132,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -114,74 +141,111 @@
     <favorites_list name="solver" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="TimeConstrainedEvaluator.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="100" column="72" selection-start="3104" selection-end="3104" vertical-scroll-proportion="0.8822394">
-              <folding>
-                <element signature="e#1440#2237#0" expanded="true" />
-                <element signature="e#2218#2219#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OutputFormFactory.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/form/output/OutputFormFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="522" column="16" selection-start="15632" selection-end="15632" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AST.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/expression/AST.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="949" column="19" selection-start="21984" selection-end="21984" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EvalUtilities.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalUtilities.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="120" column="20" selection-start="3483" selection-end="3483" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Trace.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/reflection/system/Trace.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="0" selection-start="825" selection-end="825" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EvalEngine.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalEngine.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="839" column="38" selection-start="21251" selection-end="21251" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TraceStack.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TraceStack.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="16" selection-start="1126" selection-end="1126" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.49519232">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="TimeConstrainedEvaluator.java" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="132" column="23" selection-start="4128" selection-end="4128" vertical-scroll-proportion="0.9496982">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#1551#2348#0" expanded="true" />
+                    <element signature="e#1564#1571#0" expanded="true" />
+                    <element signature="e#2329#2330#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="example.txt" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/example.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="1" column="23" selection-start="25" selection-end="25" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="example2.txt" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/example2.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="19" column="84" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="FreeQ.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/reflection/system/FreeQ.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="15" column="48" selection-start="492" selection-end="492" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="AST.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/expression/AST.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="949" column="19" selection-start="21984" selection-end="21984" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="EvalUtilities.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalUtilities.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="120" column="20" selection-start="3483" selection-end="3483" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Trace.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/reflection/system/Trace.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="26" column="0" selection-start="825" selection-end="825" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="EvalEngine.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalEngine.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="839" column="38" selection-start="21251" selection-end="21251" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="TraceStack.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TraceStack.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="52" column="16" selection-start="1126" selection-end="1126" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="example.txt" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/example.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="2" column="22" selection-start="48" selection-end="48" vertical-scroll-proportion="-0.6814672">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -208,6 +272,7 @@
         <option value="$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/EvalEngine.java" />
         <option value="$PROJECT_DIR$/example.txt" />
         <option value="$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java" />
+        <option value="$PROJECT_DIR$/example2.txt" />
       </list>
     </option>
   </component>
@@ -245,6 +310,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="solver" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -260,20 +335,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="solver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="solver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="solver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="symja" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -305,24 +366,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="solver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="solver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="symja.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope">
@@ -331,16 +374,6 @@
             <PATH_ELEMENT USER_OBJECT="Root">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="solver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -360,11 +393,11 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
-    <property name="last.edited.regexp" value="D[V,t]" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="options.searchVisible" value="true" />
+    <property name="last.edited.regexp" value="D[V,t]" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -492,7 +525,7 @@
     </configuration>
     <configuration default="false" name="symja jar" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.matheclipse.symja.Main" />
-      <option name="VM_PARAMETERS" value="" />
+      <option name="VM_PARAMETERS" value="-jar symja.jar" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/lib" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -597,7 +630,15 @@
       <created>1334089204412</created>
       <updated>1334089204412</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Заглушка">
+      <created>1334090048529</created>
+      <updated>1334090048529</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Удаляем списки из AST состоящие из одного элемента.">
+      <created>1334170828404</created>
+      <updated>1334170828404</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
@@ -632,19 +673,19 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281768" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928178" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Metrics" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23397435" sideWeight="0.601105" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23397435" sideWeight="0.601105" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3325967" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22572039" sideWeight="0.6044199" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Analyze Dataflow to" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928178" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32887402" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -686,7 +727,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил фильтрацию на некоторые типы выражений" />
+    <option name="LAST_COMMIT_MESSAGE" value="Удаляем списки из AST состоящие из одного элемента." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -709,6 +750,8 @@
     <MESSAGE value="Добавил исходники библиотеки symja" />
     <MESSAGE value="Сделал выдод debug инфы более подробым(где нужно)" />
     <MESSAGE value="Добавил фильтрацию на некоторые типы выражений" />
+    <MESSAGE value="Заглушка" />
+    <MESSAGE value="Удаляем списки из AST состоящие из одного элемента." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -718,36 +761,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///var/tmp/symja-read-only/matheclipse-core/src/main/java/org/matheclipse/core/reflection/system/Sum.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="34" selection-start="1967" selection-end="1967" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file:///var/tmp/symja-read-only/symja-gui/src/main/java/net/java/swingfx/waitwithstyle/InfiniteProgressPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="13" selection-start="3490" selection-end="3490" vertical-scroll-proportion="0.33333334" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="64" selection-start="2508" selection-end="2508" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.7.0/src.zip!/javax/swing/JRootPane.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="836" column="46" selection-start="30457" selection-end="30461" vertical-scroll-proportion="2.6053865" />
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.7.0/src.zip!/javax/swing/JApplet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="408" column="38" selection-start="13276" selection-end="13276" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/symja/commons-math/license-header.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="92" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/symja/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.040955633" />
@@ -778,11 +791,6 @@
         <state line="259" column="0" selection-start="8035" selection-end="8035" vertical-scroll-proportion="0.0">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="23" selection-start="25" selection-end="25" vertical-scroll-proportion="0.017064847" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SymjaTest.java">
@@ -825,6 +833,21 @@
         <state line="393" column="0" selection-start="10289" selection-end="10289" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/meconsole013.jar!/org/matheclipse/core/interfaces/IExpr.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="173" selection-end="173" vertical-scroll-proportion="0.121703856" />
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/meconsole013.jar!/org/matheclipse/generic/nested/INestedListElement.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="172" selection-end="172" vertical-scroll-proportion="0.12711865" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/interfaces/IExpr.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="21" selection-start="520" selection-end="520" vertical-scroll-proportion="0.26061776" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/expression/AST.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="949" column="19" selection-start="21984" selection-end="21984" vertical-scroll-proportion="0.0" />
@@ -854,38 +877,70 @@
         <state line="52" column="16" selection-start="1126" selection-end="1126" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/meconsole013.jar!/org/matheclipse/core/interfaces/IExpr.class">
+    <entry file="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/meconsole013.jar!/org/matheclipse/core/expression/F.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="17" selection-start="173" selection-end="173" vertical-scroll-proportion="0.121703856">
+        <state line="415" column="55" selection-start="28093" selection-end="28093" vertical-scroll-proportion="0.34309134">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/symja/symja.ajax/war/WEB-INF/lib/meconsole013.jar!/org/matheclipse/generic/nested/INestedListElement.class">
+    <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/reflection/system/Cos.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="17" selection-start="172" selection-end="172" vertical-scroll-proportion="0.12711865">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/interfaces/IExpr.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="21" selection-start="520" selection-end="520" vertical-scroll-proportion="0.26061776">
+        <state line="20" column="13" selection-start="740" selection-end="740" vertical-scroll-proportion="-1.0819112">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/form/output/OutputFormFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="522" column="16" selection-start="15632" selection-end="15632" vertical-scroll-proportion="0.0" />
+        <state line="424" column="41" selection-start="12868" selection-end="12868" vertical-scroll-proportion="0.33204633">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/expression/F.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1077" column="30" selection-start="22801" selection-end="22801" vertical-scroll-proportion="0.52895755">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/jdk1.7.0/src.zip!/java/util/ArrayList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="380" column="13" selection-start="14061" selection-end="14061" vertical-scroll-proportion="0.33204633">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="23" selection-start="25" selection-end="25" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="84" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/reflection/system/FreeQ.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="48" selection-start="492" selection-end="492" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/symja/matheclipse-core/src/main/java/org/matheclipse/core/eval/TimeConstrainedEvaluator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="72" selection-start="3104" selection-end="3104" vertical-scroll-proportion="0.8822394">
+        <state line="132" column="23" selection-start="4128" selection-end="4128" vertical-scroll-proportion="0.9496982">
           <folding>
-            <element signature="e#1440#2237#0" expanded="true" />
-            <element signature="e#2218#2219#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1551#2348#0" expanded="true" />
+            <element signature="e#1564#1571#0" expanded="true" />
+            <element signature="e#2329#2330#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -967,7 +1022,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>lib</last-edited>
+          <last-edited>symja</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
