@@ -59,7 +59,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
                                 IExpr part = expr.get(i);
                                 if (part != null && part.isSymbol()) {
                                     Symbol symbol = ((Symbol) part);
-                                    if (F.Derivative.isSame(symbol) || F.Function.isSame(symbol) || F.Expand.isSame(symbol) || F.ExpandAll.isSame(symbol)) {
+                                    if (F.Derivative.isSame(symbol) || F.Function.isSame(symbol) || F.Expand.isSame(symbol) || F.ExpandAll.isSame(symbol)|| F.FreeQ.isSame(symbol)) {
                                         return false;
                                     }
                                 }
