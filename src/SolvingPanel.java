@@ -1,6 +1,10 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class SolvingPanel extends JPanel {
 
@@ -31,5 +35,13 @@ public class SolvingPanel extends JPanel {
         BoxLayout layout = new BoxLayout(currentRow, BoxLayout.X_AXIS);
         currentRow.setLayout(layout);
         add(currentRow, LEFT_ALIGNMENT);
+    }
+
+    public void addConsequence(){
+        try {
+            addImage(ImageIO.read(new FileInputStream("img/eqArrow.gif")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

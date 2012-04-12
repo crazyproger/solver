@@ -36,6 +36,8 @@ public class Application2 {
     private SolvingPanel spLeft;
     private SolvingPanel spRight;
     private SolvingPanel spCenter;
+    private static JFrame frame;
+    private final IndexedFocusTraversalPolicy traversalPolicy;
 
     public Application2() {
         $$$setupUI$$$();
@@ -51,6 +53,22 @@ public class Application2 {
                 calculate();
             }
         });
+
+        traversalPolicy = new IndexedFocusTraversalPolicy();
+        traversalPolicy.addIndexedComponent(tfT);
+        traversalPolicy.addIndexedComponent(tfP);
+        traversalPolicy.addIndexedComponent(tfLeftU);
+        traversalPolicy.addIndexedComponent(tfLeftV);
+        traversalPolicy.addIndexedComponent(tfA1);
+        traversalPolicy.addIndexedComponent(tfK10);
+        traversalPolicy.addIndexedComponent(tfK11);
+        traversalPolicy.addIndexedComponent(tfRightU);
+        traversalPolicy.addIndexedComponent(tfRightV);
+        traversalPolicy.addIndexedComponent(tfA2);
+        traversalPolicy.addIndexedComponent(tfK20);
+        traversalPolicy.addIndexedComponent(tfK21);
+        traversalPolicy.addIndexedComponent(bCalculate);
+        traversalPolicy.addIndexedComponent(bExit);
     }
 
     private void calculate() {
@@ -63,8 +81,9 @@ public class Application2 {
             @Override
             public void run() {
                 Application2 app = new Application2();
-                JFrame frame = new JFrame("Solver by Z. Sergei");
+                frame = new JFrame("Solver by Z. Sergei");
                 frame.setContentPane(app.getRootPanel());
+                frame.setFocusTraversalPolicy(app.getTraversalPolicy());
                 frame.pack();
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -117,6 +136,10 @@ public class Application2 {
             e.printStackTrace();
             System.exit(255);
         }
+    }
+
+    public IndexedFocusTraversalPolicy getTraversalPolicy() {
+        return traversalPolicy;
     }
 
     /**
