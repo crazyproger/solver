@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,11 +34,12 @@ public class SolvingPanel extends JPanel {
             @Override
             protected void paintComponent(Graphics g) {
                 this.setMinimumSize(new Dimension(icon.getIconWidth(),icon.getIconHeight()));
-                this.setPreferredSize(new Dimension(icon.getIconWidth(),icon.getIconHeight()));
-                this.setMaximumSize(new Dimension(icon.getIconWidth(),icon.getIconHeight()));
+                this.setPreferredSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+                this.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
                 icon.paintIcon(this,g,0,0);
             }
         };
+        panel.setBorder(new LineBorder(Color.RED));
         currentRow.add(panel, LEFT_ALIGNMENT);
     }
 
