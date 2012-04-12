@@ -6,15 +6,13 @@ public class Application2 {
     private JButton bExit;
     private JButton bCalculate;
     private JPanel lagrangePanel;
-    private JPanel panelT;
-    private JPanel panelV;
     private JPanel rootPanel;
     private JTextField textField1;
     private JTextField textField2;
     private JPanel x02aPanel;
     private JPanel x2a2pPanel;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField tfLeftU;
+    private JTextField tfRightU;
     private JTextField textField5;
     private JTextField textField6;
     private JTextField textField7;
@@ -23,6 +21,12 @@ public class Application2 {
     private JTextField textField10;
     private JTextField textField11;
     private JTextField textField12;
+    private JPanel a1ImgPanel;
+    private JPanel k10ImgPanel;
+    private JPanel k11ImgPanel;
+    private JPanel a2ImgPanel;
+    private JPanel k20ImgPanel;
+    private JPanel k21ImgPanel;
 
     public Application2() {
         bExit.addActionListener(new ActionListener() {
@@ -44,6 +48,7 @@ public class Application2 {
     }
 
     public static void main(String[] args) {
+        setLAF();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -66,6 +71,12 @@ public class Application2 {
         lagrangePanel = new ImagePanel("img/lagrange2.gif");
         x02aPanel = new ImagePanel("img/x02a.gif");
         x2a2pPanel = new ImagePanel("img/x2a2p.gif");
+        a1ImgPanel = new ImagePanel("img/A1eq.gif");
+        a2ImgPanel = new ImagePanel("img/A2eq.gif");
+        k10ImgPanel = new ImagePanel("img/K10eq.gif");
+        k11ImgPanel = new ImagePanel("img/K11eq.gif");
+        k20ImgPanel = new ImagePanel("img/K20eq.gif");
+        k21ImgPanel = new ImagePanel("img/K21eq.gif");
     }
 
     private static void setLAF() {

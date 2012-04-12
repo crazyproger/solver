@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="symja" pattern="file[Surfaceplotter]:*/||file[symja-gui]:*/||file[Symja.ajax]:*/||file[matheclipse-parser-test]:*/||file[matheclipse-parser]:*/||file[matheclipse-generic]:*/||file[matheclipse-core-test]:*/||file[matheclipse-core]:*/||file[jsyntaxpane]:*/||file[jas]:*/||file[commons-math]:*/" />
+</component>
