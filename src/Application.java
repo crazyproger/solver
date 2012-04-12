@@ -6,56 +6,18 @@ import org.matheclipse.core.form.output.StringBufferWriter;
 import org.matheclipse.core.interfaces.IExpr;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Application {
 
-    private JButton bExit;
-    private JButton bCalculate;
-    private JTextArea taResult;
-    private JTextArea taV;
-    private JTextArea taU;
-    private JTextArea taT;
-    private JPanel rootPanel;
-    private JButton θButton;
-    private JButton ψButton;
-    private JButton φButton;
-    private JButton πButton;
-    private JButton ωButton;
-    private JButton ρButton;
-    private JButton button11;
-    private JButton button12;
-    private JButton button13;
-    private JButton button14;
-    private JButton button15;
-    private JButton button16;
-    private JButton button17;
-    private JButton sqrtButton;
-    private JButton integralButton;
-    private JButton button1;
-
-    public Application() {
-        bExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        bCalculate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                calculate();
-            }
-        });
-    }
-
     private void calculate() {
-        taResult.setText("");
+//        taResult.setText("");
 
-        String uText = taU.getText();
-        String vText = taV.getText();
-        String master = taT.getText();
+        String uText = "";//taU.getText();
+        String vText = "";//taV.getText();
+        String master = "";//taT.getText();
         String sumStr = "Sum(i,1,N)";
         boolean wasSum = false;
         if (uText.startsWith(sumStr)) {
@@ -88,10 +50,6 @@ public class Application {
     }
 
     private void addToResult(String title, String result) {
-        taResult.append(title);
-        taResult.append("= \n");
-        taResult.append(result);
-        taResult.append("\n");
     }
 
     private static String solveExpr(String input) {
@@ -116,39 +74,6 @@ public class Application {
         } finally {
             // Call terminate() only one time at the end of the program
             ComputerThreads.terminate();
-        }
-    }
-
-    public JPanel getRootPanel() {
-        return rootPanel;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setLAF();
-                Application app = new Application();
-                JFrame frame = new JFrame("Solver by Z. Sergei");
-                frame.setContentPane(app.getRootPanel());
-                frame.pack();
-                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-            }
-        });
-    }
-
-    private static void setLAF() {
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-            System.exit(255);
         }
     }
 }
