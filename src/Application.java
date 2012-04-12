@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintStream;
-import java.util.Iterator;
 
 public class Application {
     private JButton bExit;
@@ -94,11 +93,13 @@ public class Application {
         new TeXEnvironment(TeXConstants.STYLE_DISPLAY, new DefaultTeXFont(16));
     }
 
-    private String toTeX(Object mathML) {
+    private String toTeX(Object... mathML) {
         final StringBufferWriter buffer = new StringBufferWriter();
         final TeXUtilities texUtil = new TeXUtilities(EVAL_ENGINE);
         if (mathML != null) {
-            texUtil.toTeX(mathML, buffer);
+            for (Object o : mathML) {
+                texUtil.toTeX(o, buffer);
+            }
         }
         return buffer.toString();
     }
@@ -141,20 +142,20 @@ public class Application {
         final StringBufferWriter buf0 = new StringBufferWriter();
 
         // use evalTrace method
-        String testExpr = "D[Sin[x],x]";
+        String testExpr = "D[Sin[x]*Cos[y],x]";
         final IExpr expr = EVAL.constrainedEval(buf0, testExpr, true);
-        render(spCenter, expr, testExpr);
+        render(spCenter, expr);
 
         System.out.println(buf0.toString());
     }
 
-    private void render(SolvingPanel panel, IExpr expr, Object source) {
+    private void render(SolvingPanel panel, IExpr expr) {
         if (!expr.isList()) {
             TeXIcon teXIcon = getIcon(expr);
             panel.addIcon(teXIcon);
         } else {
             AST ast = (AST) expr;
-            IExpr result = renderInternal(panel, ast);
+            IExpr result = renderInternal(panel, ast, false);
             if (result != null && !ast.get(1).isList()) {
                 panel.addRow();
                 String bold = "\\mathbf{";
@@ -163,32 +164,43 @@ public class Application {
         }
     }
 
-    private TeXIcon getIcon(Object expr) {
+    private TeXIcon getIcon(Object... expr) {
         String tex = toTeX(expr);
         return renderTeX(tex);
     }
 
-    private IExpr renderInternal(SolvingPanel panel, AST expr) {
+    private IExpr renderInternal(SolvingPanel panel, AST expr, boolean drawConsequence) {
         IExpr last = null;
-        Iterator<IExpr> iterator = expr.iterator();
-        while (iterator.hasNext()) {
-            IExpr iExpr = iterator.next();
+        for (int i = 1; i < expr.size(); i++) {
+            IExpr iExpr = expr.get(i);
+            boolean isNotLast = i < (expr.size() - 1);
             if (iExpr.isList()) {
-                panel.addRow();
-                renderInternal(panel, (AST) iExpr);
-                panel.addIcon(getIcon("\\Rightarrow"));
+                if (i != 1) {
+                    panel.addRow();
+                }
+                renderInternal(panel, (AST) iExpr, true);
                 panel.addRow();
                 if (last != null) {
-                    panel.addIcon(getIcon(last));
-                    if (iterator.hasNext()) {
-                        panel.addIcon(getIcon("="));
+                    if (isNotLast) {
+                        panel.addIcon(getIcon(last, "="));
+                    } else {
+                        panel.addIcon(getIcon(last));
                     }
                 }
             } else {
                 last = iExpr;
-                panel.addIcon(getIcon(iExpr));
-                if (iterator.hasNext()) {
-                    panel.addIcon(getIcon("="));
+                if (isNotLast) {
+                    if (!expr.get(i + 1).isList()) {
+                        panel.addIcon(getIcon(iExpr, "="));
+                    } else {
+                        panel.addIcon(getIcon(iExpr));
+                    }
+                } else {
+                    if (drawConsequence) {
+                        panel.addIcon(getIcon(iExpr, "\\Rightarrow"));
+                    } else {
+                        panel.addIcon(getIcon(iExpr));
+                    }
                 }
             }
         }

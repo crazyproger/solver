@@ -1,11 +1,7 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class SolvingPanel extends JPanel {
 
@@ -30,21 +26,20 @@ public class SolvingPanel extends JPanel {
     }
 
     public void addIcon(final Icon icon) {
-        JPanel panel = new JPanel(){
+        JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                this.setMinimumSize(new Dimension(icon.getIconWidth(),icon.getIconHeight()));
-                this.setPreferredSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-                this.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-                icon.paintIcon(this,g,0,0);
+                icon.paintIcon(this, g, 0, 0);
             }
         };
-        panel.setBorder(new LineBorder(Color.RED));
+        panel.setMinimumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight() + 2));
+        panel.setPreferredSize(new Dimension(icon.getIconWidth(), icon.getIconHeight() + 2));
+        panel.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight() + 2));
         currentRow.add(panel, LEFT_ALIGNMENT);
     }
 
     public void addRow() {
-        gridLayout.setRows(gridLayout.getRows()+1);
+        gridLayout.setRows(gridLayout.getRows() + 1);
         currentRow = new JPanel();
         currentRow.setBackground(BACKGROUND);
         BoxLayout layout = new BoxLayout(currentRow, BoxLayout.X_AXIS);
