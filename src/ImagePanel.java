@@ -12,16 +12,25 @@ public class ImagePanel extends JPanel {
     public ImagePanel(String pathname) {
         try {
             image = ImageIO.read(new File(pathname));
-            setMinimumSize(new Dimension(image.getWidth(), image.getHeight()));
-            setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
-            setMaximumSize(new Dimension(image.getWidth(), image.getHeight()));
-        } catch (IOException ex) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        setSize();
+    }
+
+    public ImagePanel(BufferedImage image) {
+        this.image = image;
+        setSize();
+    }
+
+    private void setSize() {
+        setMinimumSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+        setPreferredSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+        setMaximumSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
     }
 
     @Override
     public void paintComponent(Graphics g) {
-
         g.drawImage(image, 0, 0, null);
     }
 }
