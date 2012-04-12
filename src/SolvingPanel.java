@@ -32,6 +32,9 @@ public class SolvingPanel extends JPanel {
         JPanel panel = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
+                this.setMinimumSize(new Dimension(icon.getIconWidth(),icon.getIconHeight()));
+                this.setPreferredSize(new Dimension(icon.getIconWidth(),icon.getIconHeight()));
+                this.setMaximumSize(new Dimension(icon.getIconWidth(),icon.getIconHeight()));
                 icon.paintIcon(this,g,0,0);
             }
         };

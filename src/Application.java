@@ -3,12 +3,15 @@ import org.matheclipse.core.eval.TeXUtilities;
 import org.matheclipse.core.eval.TimeConstrainedEvaluator;
 import org.matheclipse.core.expression.F;
 import org.matheclipse.core.form.output.StringBufferWriter;
+import org.matheclipse.core.interfaces.IExpr;
+import org.matheclipse.core.util.WriterOutputStream;
 import org.scilab.forge.jlatexmath.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintStream;
 
 public class Application {
     private JButton bExit;
@@ -60,7 +63,11 @@ public class Application {
         bCalculate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                calculate();
+                try {
+                    calculate();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
@@ -69,7 +76,11 @@ public class Application {
         initEngine();
 
         // todo for test
-        calculate();
+        try {
+            calculate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initEngine() {
@@ -81,7 +92,7 @@ public class Application {
         new TeXEnvironment(TeXConstants.STYLE_DISPLAY, new DefaultTeXFont(16));
     }
 
-    private String toTeX(String mathML) {
+    private String toTeX(IExpr mathML) {
         final StringBufferWriter buffer = new StringBufferWriter();
         final TeXUtilities texUtil = new TeXUtilities(EVAL_ENGINE);
         if (mathML != null) {
@@ -119,11 +130,26 @@ public class Application {
         traversalPolicy.addIndexedComponent(bExit);
     }
 
-    private void calculate() {
+    private void calculate() throws Exception {
+        final StringBufferWriter printBuffer = new StringBufferWriter();
+        final PrintStream pout = new PrintStream(new WriterOutputStream(printBuffer));
+
+        EVAL_ENGINE.setOutPrintStream(pout);
+
+        final StringBufferWriter buf0 = new StringBufferWriter();
+
+        // use evalTrace method
         String testExpr = "D[Sin[x],x]";
-        String tex = toTeX(testExpr);
-        TeXIcon icon = renderTeX(tex);
+        final IExpr expr = EVAL.constrainedEval(buf0, testExpr, true);
+        TeXIcon icon = getIcon(expr);
         spLeft.addIcon(icon);
+
+        System.out.println(buf0.toString());
+    }
+
+    private TeXIcon getIcon(IExpr expr) {
+        String tex = toTeX(expr);
+        return renderTeX(tex);
     }
 
     public static void main(String[] args) {
