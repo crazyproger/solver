@@ -28,6 +28,16 @@ public class SolvingPanel extends JPanel {
         currentRow.add(panel, LEFT_ALIGNMENT);
     }
 
+    public void addIcon(final Icon icon) {
+        JPanel panel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                icon.paintIcon(this,g,0,0);
+            }
+        };
+        currentRow.add(panel, LEFT_ALIGNMENT);
+    }
+
     public void addRow() {
         gridLayout.setRows(gridLayout.getRows()+1);
         currentRow = new JPanel();
@@ -35,13 +45,5 @@ public class SolvingPanel extends JPanel {
         BoxLayout layout = new BoxLayout(currentRow, BoxLayout.X_AXIS);
         currentRow.setLayout(layout);
         add(currentRow, LEFT_ALIGNMENT);
-    }
-
-    public void addConsequence(){
-        try {
-            addImage(ImageIO.read(new FileInputStream("img/eqArrow.gif")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

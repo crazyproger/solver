@@ -1,3 +1,10 @@
+import org.matheclipse.core.eval.EvalEngine;
+import org.matheclipse.core.eval.TeXUtilities;
+import org.matheclipse.core.eval.TimeConstrainedEvaluator;
+import org.matheclipse.core.expression.F;
+import org.matheclipse.core.form.output.StringBufferWriter;
+import org.scilab.forge.jlatexmath.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -37,7 +44,10 @@ public class Application {
     private SolvingPanel spRight;
     private SolvingPanel spCenter;
     private static JFrame frame;
-    private final IndexedFocusTraversalPolicy traversalPolicy;
+    private IndexedFocusTraversalPolicy traversalPolicy;
+    private EvalEngine EVAL_ENGINE;
+    private TimeConstrainedEvaluator EVAL;
+    private static final float FONT_SIZE_TEX = 24;
 
     public Application() {
         $$$setupUI$$$();
@@ -54,6 +64,44 @@ public class Application {
             }
         });
 
+        setupTraversalPolicy();
+
+        initEngine();
+
+        // todo for test
+        calculate();
+    }
+
+    private void initEngine() {
+        F.initSymbols(null, null, false);
+        EVAL_ENGINE = new EvalEngine();
+        EVAL = new TimeConstrainedEvaluator(EVAL_ENGINE, false, 360000);
+        // for faster initialization of pretty print output we create a dummy
+        // instance here:
+        new TeXEnvironment(TeXConstants.STYLE_DISPLAY, new DefaultTeXFont(16));
+    }
+
+    private String toTeX(String mathML) {
+        final StringBufferWriter buffer = new StringBufferWriter();
+        final TeXUtilities texUtil = new TeXUtilities(EVAL_ENGINE);
+        if (mathML != null) {
+            texUtil.toTeX(mathML, buffer);
+        }
+        return buffer.toString();
+    }
+
+    private TeXIcon renderTeX(String tex) {
+        try {
+            TeXFormula formula = new TeXFormula(tex);
+            return formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, FONT_SIZE_TEX, TeXConstants.UNIT_PIXEL, 80,
+                    TeXConstants.ALIGN_LEFT);
+        } catch (final Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void setupTraversalPolicy() {
         traversalPolicy = new IndexedFocusTraversalPolicy();
         traversalPolicy.addIndexedComponent(tfT);
         traversalPolicy.addIndexedComponent(tfP);
@@ -72,7 +120,10 @@ public class Application {
     }
 
     private void calculate() {
-        //To change body of created methods use File | Settings | File Templates.
+        String testExpr = "D[Sin[x],x]";
+        String tex = toTeX(testExpr);
+        TeXIcon icon = renderTeX(tex);
+        spLeft.addIcon(icon);
     }
 
     public static void main(String[] args) {
