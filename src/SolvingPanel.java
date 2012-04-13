@@ -1,3 +1,5 @@
+import org.scilab.forge.jlatexmath.TeXIcon;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -51,6 +53,11 @@ public class SolvingPanel extends JPanel {
     public void removeAll() {
         super.removeAll();
         gridLayout.setRows(0);
+        addRow();
+    }
+
+    public void addIconRow(TeXIcon teXIcon) {
+        addIcon(teXIcon);
         addRow();
     }
 }

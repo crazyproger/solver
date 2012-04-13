@@ -189,18 +189,24 @@ public class Application {
         EvalEngine.set(EVAL_ENGINE);
         IExpr uExpr = EVAL_ENGINE.parse(preprocesInput(tfLeftU.getText()));
         TeXIcon teXIcon = getIcon("U=", uExpr);
-        spLeft.addIcon(teXIcon);
-        spLeft.addRow();
+        spLeft.addIconRow(teXIcon);
         IExpr vExpr = EVAL_ENGINE.parse(preprocesInput(tfLeftV.getText()));
         teXIcon = getIcon("V=", vExpr);
-        spLeft.addIcon(teXIcon);
-
+        spLeft.addIconRow(teXIcon);
 
         // differentiations
-        IExpr vDExpr = transform(uExpr, SUM_PREDICATE);
-        spLeft.addRow();
-        teXIcon = getIcon("\\dot{V}=", vDExpr);
-        spLeft.addIcon(teXIcon);
+        teXIcon = getIcon(new Function<String, String>() {
+            @Override
+            public String apply(@Nullable String s) {
+                return s.replaceAll("(bzz\\w+)", "\\\\dot{$1}");
+            }
+        }, "\\dot{V}=", uExpr);
+        spLeft.addIconRow(teXIcon);
+
+        // partial differentiations
+//        IExpr vDExpr = transform(uExpr, SUM_PREDICATE);
+//        teXIcon = getIcon("\\dot{V}/=", vDExpr);
+//        spLeft.addIconRow(teXIcon);
 
     }
 
@@ -269,6 +275,14 @@ public class Application {
 
     private TeXIcon getIcon(Object... expr) {
         String tex = toTeX(expr);
+        return renderTeX(tex);
+    }
+
+    private TeXIcon getIcon(Function<String, String> postProcessor, Object... expr) {
+        String tex = toTeX(expr);
+        if (postProcessor != null) {
+            return renderTeX(postProcessor.apply(tex));
+        }
         return renderTeX(tex);
     }
 
