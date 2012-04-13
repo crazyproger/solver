@@ -46,4 +46,11 @@ public class SolvingPanel extends JPanel {
         currentRow.setLayout(layout);
         add(currentRow, LEFT_ALIGNMENT);
     }
+
+    @Override
+    public void removeAll() {
+        super.removeAll();
+        gridLayout.setRows(0);
+        addRow();
+    }
 }

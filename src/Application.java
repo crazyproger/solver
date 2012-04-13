@@ -1,3 +1,4 @@
+import com.google.common.base.Function;
 import org.matheclipse.core.eval.EvalEngine;
 import org.matheclipse.core.eval.TeXUtilities;
 import org.matheclipse.core.eval.TimeConstrainedEvaluator;
@@ -8,6 +9,7 @@ import org.matheclipse.core.interfaces.IExpr;
 import org.matheclipse.core.util.WriterOutputStream;
 import org.scilab.forge.jlatexmath.*;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.io.PrintStream;
 
 public class Application {
+
     private JButton bExit;
     private JButton bCalculate;
     private JPanel lagrangePanel;
@@ -56,6 +59,17 @@ public class Application {
     private EvalEngine EVAL_ENGINE;
     private TimeConstrainedEvaluator EVAL;
     private static final float FONT_SIZE_TEX = 24;
+
+    public static final Function<IExpr, IExpr> SUM_PREDICATE = new Function<IExpr, IExpr>() {
+        @Override
+        public IExpr apply(@Nullable IExpr iExpr) {
+            if (iExpr.head().isSame(F.Sum)) {
+                return iExpr.getAt(1);
+            }
+            return iExpr;
+        }
+    };
+
 
     public Application() {
         $$$setupUI$$$();
@@ -138,12 +152,17 @@ public class Application {
     }
 
     private void calculate() throws Exception {
+
+        spCenter.removeAll();
+        spLeft.removeAll();
+        spRight.removeAll();
+
         final StringBufferWriter printBuffer = new StringBufferWriter();
         final PrintStream pout = new PrintStream(new WriterOutputStream(printBuffer));
-
         EVAL_ENGINE.setOutPrintStream(pout);
-
         final StringBufferWriter buf0 = new StringBufferWriter();
+
+        processLeftPanel();
 
         // use evalTrace method
         String testExpr = "D[Sin[x]*Cos[y],x]";
@@ -151,6 +170,46 @@ public class Application {
         render(spCenter, expr);
 
         System.out.println(buf0.toString());
+        System.out.println(pout.toString());
+    }
+
+    private void processLeftPanel() {
+        EvalEngine.set(EVAL_ENGINE);
+        IExpr uExpr = EVAL_ENGINE.parse(tfLeftU.getText());
+        TeXIcon teXIcon = getIcon("U=", uExpr);
+        spLeft.addIcon(teXIcon);
+        spLeft.addRow();
+        IExpr vExpr = EVAL_ENGINE.parse(tfLeftV.getText());
+        teXIcon = getIcon("V=", vExpr);
+        spLeft.addIcon(teXIcon);
+
+        // differentiations
+        IExpr vDExpr = transform(uExpr, SUM_PREDICATE);
+        spLeft.addRow();
+        teXIcon = getIcon("\\dot{V}=", vDExpr);
+        spLeft.addIcon(teXIcon);
+
+    }
+
+    private IExpr transform(IExpr srcExpr, Function<IExpr, IExpr> function) {
+        IExpr processed = function.apply(srcExpr);
+        if (processed.isAST()) {
+            AST result = new AST();
+            result.set(0, processed.getAt(0));
+            for (IExpr expr : (AST) processed) {
+                IExpr filtered = transform(expr, function);
+                if (filtered != null) {
+                    result.add(filtered);
+                }
+            }
+            return result;
+        } else {
+            return processed;
+        }
+    }
+
+    private void renderTeX(SolvingPanel panel, String tex) {
+        panel.addIcon(getIcon(tex));
     }
 
     private void render(SolvingPanel panel, IExpr expr) {

@@ -12,6 +12,7 @@
     <orderEntry type="module" module-name="symja-gui" />
     <orderEntry type="library" scope="RUNTIME" name="lib" level="project" />
     <orderEntry type="module" module-name="matheclipse-generic" />
+    <orderEntry type="library" name="symja" level="project" />
   </component>
 </module>
 
