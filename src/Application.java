@@ -1,4 +1,6 @@
 import com.google.common.base.Function;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import org.matheclipse.core.eval.EvalEngine;
 import org.matheclipse.core.eval.TeXUtilities;
 import org.matheclipse.core.eval.TimeConstrainedEvaluator;
@@ -15,6 +17,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintStream;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Application {
 
@@ -70,6 +75,9 @@ public class Application {
         }
     };
 
+    private BiMap<String, String> replacements = HashBiMap.create();
+    private BiMap<String, String> texReplacements = HashBiMap.create();
+
 
     public Application() {
         $$$setupUI$$$();
@@ -123,8 +131,12 @@ public class Application {
     }
 
     private TeXIcon renderTeX(String tex) {
+        String result = tex;
+        for (Map.Entry<String, String> entry : texReplacements.entrySet()) {
+            result = result.replaceAll(entry.getKey(), entry.getValue());
+        }
         try {
-            TeXFormula formula = new TeXFormula(tex);
+            TeXFormula formula = new TeXFormula(result);
             return formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, FONT_SIZE_TEX, TeXConstants.UNIT_PIXEL, 80,
                     TeXConstants.ALIGN_LEFT);
         } catch (final Exception e) {
@@ -175,13 +187,14 @@ public class Application {
 
     private void processLeftPanel() {
         EvalEngine.set(EVAL_ENGINE);
-        IExpr uExpr = EVAL_ENGINE.parse(tfLeftU.getText());
+        IExpr uExpr = EVAL_ENGINE.parse(preprocesInput(tfLeftU.getText()));
         TeXIcon teXIcon = getIcon("U=", uExpr);
         spLeft.addIcon(teXIcon);
         spLeft.addRow();
-        IExpr vExpr = EVAL_ENGINE.parse(tfLeftV.getText());
+        IExpr vExpr = EVAL_ENGINE.parse(preprocesInput(tfLeftV.getText()));
         teXIcon = getIcon("V=", vExpr);
         spLeft.addIcon(teXIcon);
+
 
         // differentiations
         IExpr vDExpr = transform(uExpr, SUM_PREDICATE);
@@ -189,6 +202,33 @@ public class Application {
         teXIcon = getIcon("\\dot{V}=", vDExpr);
         spLeft.addIcon(teXIcon);
 
+    }
+
+    private String preprocesInput(String text) {
+        StringBuilder result = new StringBuilder();
+        Pattern pattern = Pattern.compile("(\\w+)_([\\d\\w]+)");
+        Matcher matcher = pattern.matcher(text);
+        int previous = 0;
+        int start;
+        int end;
+        while (matcher.find()) {
+            String group = matcher.group();
+            start = matcher.start();
+            end = matcher.end();
+            result.append(text.substring(previous, start));
+            previous = end;
+            String replacement;
+            if (replacements.containsKey(group)) {
+                replacement = replacements.get(group);
+            } else {
+                replacement = matcher.group(1) + "zz" + Utils.generateString(3);
+                replacements.put(group, replacement);
+                texReplacements.put(replacement, matcher.group(1) + "_{" + matcher.group(2) + "}");
+            }
+            result.append(replacement);
+        }
+        result.append(text.substring(previous, text.length()));
+        return result.toString();
     }
 
     private IExpr transform(IExpr srcExpr, Function<IExpr, IExpr> function) {
