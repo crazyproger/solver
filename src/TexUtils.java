@@ -5,11 +5,19 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TexUtils {
+    public static final Function<String, String> bDotPostProcessor = new Function<String, String>() {
+        @Override
+        public String apply(@Nullable String s) {
+            return s.replaceAll("(bzz\\w+)", "\\\\dot{$1}");
+        }
+    };
+
     public static String preprocessInput(String text) {
         StringBuilder result = new StringBuilder();
         Pattern pattern = Pattern.compile("(\\w+)_([\\d\\w]+)");

@@ -8,7 +8,10 @@ import org.matheclipse.core.expression.F;
 import org.matheclipse.core.form.output.StringBufferWriter;
 import org.matheclipse.core.interfaces.IExpr;
 import org.matheclipse.core.util.WriterOutputStream;
-import org.scilab.forge.jlatexmath.*;
+import org.scilab.forge.jlatexmath.DefaultTeXFont;
+import org.scilab.forge.jlatexmath.TeXConstants;
+import org.scilab.forge.jlatexmath.TeXEnvironment;
+import org.scilab.forge.jlatexmath.TeXIcon;
 
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -65,7 +68,7 @@ public class Application {
     public static final Function<IExpr, IExpr> SUM_PREDICATE = new Function<IExpr, IExpr>() {
         @Override
         public IExpr apply(@Nullable IExpr iExpr) {
-            if (iExpr.head().isSame(F.Sum)) {
+            if (F.Sum.isSame(iExpr.head())) {
                 return iExpr.getAt(1);
             }
             return iExpr;
@@ -169,12 +172,9 @@ public class Application {
         spLeft.addIconRow(teXIcon);
 
         // differentiations
-        teXIcon = TexUtils.getIcon(new Function<String, String>() {
-            @Override
-            public String apply(@Nullable String s) {
-                return s.replaceAll("(bzz\\w+)", "\\\\dot{$1}");
-            }
-        }, "\\dot{V}=", vExpr);
+        teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{V}=", vExpr);
+        spLeft.addIconRow(teXIcon);
+        teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{U}=", uExpr);
         spLeft.addIconRow(teXIcon);
 
         // partial differentiations
@@ -195,12 +195,7 @@ public class Application {
         spRight.addIconRow(teXIcon);
 
         // differentiations
-        teXIcon = TexUtils.getIcon(new Function<String, String>() {
-            @Override
-            public String apply(@Nullable String s) {
-                return s.replaceAll("(bzz\\w+)", "\\\\dot{$1}");
-            }
-        }, "\\dot{V}=", vExpr);
+        teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{V}=", vExpr);
         spRight.addIconRow(teXIcon);
     }
 
