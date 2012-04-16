@@ -1,3 +1,5 @@
+import org.apache.commons.io.FilenameUtils;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,7 @@ public class ImagePanel extends JPanel {
 
     public ImagePanel(String pathname) {
         try {
-            image = ImageIO.read(new File(pathname));
+            image = ImageIO.read(new File(FilenameUtils.separatorsToSystem(pathname)));
         } catch (IOException e) {
             e.printStackTrace();
         }

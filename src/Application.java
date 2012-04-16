@@ -2,7 +2,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.matheclipse.core.eval.EvalEngine;
-import org.matheclipse.core.eval.TeXUtilities;
 import org.matheclipse.core.eval.TimeConstrainedEvaluator;
 import org.matheclipse.core.expression.AST;
 import org.matheclipse.core.expression.F;
@@ -17,9 +16,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintStream;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Application {
 
@@ -62,9 +58,9 @@ public class Application {
     private SolvingPanel spCenter;
     private static JFrame frame;
     private IndexedFocusTraversalPolicy traversalPolicy;
-    private EvalEngine EVAL_ENGINE;
+    public static EvalEngine EVAL_ENGINE;
     private TimeConstrainedEvaluator EVAL;
-    private static final float FONT_SIZE_TEX = 24;
+    public static final float FONT_SIZE_TEX = 24;
 
     public static final Function<IExpr, IExpr> SUM_PREDICATE = new Function<IExpr, IExpr>() {
         @Override
@@ -76,8 +72,8 @@ public class Application {
         }
     };
 
-    private BiMap<String, String> replacements = HashBiMap.create();
-    private BiMap<String, String> texReplacements = HashBiMap.create();
+    public static BiMap<String, String> replacements = HashBiMap.create();
+    public static BiMap<String, String> texReplacements = HashBiMap.create();
 
 
     public Application() {
@@ -120,32 +116,6 @@ public class Application {
         // for faster initialization of pretty print output we create a dummy
         // instance here:
         new TeXEnvironment(TeXConstants.STYLE_DISPLAY, new DefaultTeXFont(16));
-    }
-
-    private String toTeX(Object... mathML) {
-        final StringBufferWriter buffer = new StringBufferWriter();
-        final TeXUtilities texUtil = new TeXUtilities(EVAL_ENGINE);
-        if (mathML != null) {
-            for (Object o : mathML) {
-                texUtil.toTeX(o, buffer);
-            }
-        }
-        return buffer.toString();
-    }
-
-    private TeXIcon renderTeX(String tex) {
-        String result = tex;
-        for (Map.Entry<String, String> entry : texReplacements.entrySet()) {
-            result = result.replaceAll(entry.getKey(), entry.getValue());
-        }
-        try {
-            TeXFormula formula = new TeXFormula(result);
-            return formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, FONT_SIZE_TEX, TeXConstants.UNIT_PIXEL, 80,
-                    TeXConstants.ALIGN_LEFT);
-        } catch (final Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private void setupTraversalPolicy() {
@@ -191,15 +161,15 @@ public class Application {
 
     private void processLeftPanel() {
         EvalEngine.set(EVAL_ENGINE);
-        IExpr uExpr = EVAL_ENGINE.parse(preprocesInput(tfLeftU.getText()));
-        TeXIcon teXIcon = getIcon("U=", uExpr);
+        IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftU.getText()));
+        TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
         spLeft.addIconRow(teXIcon);
-        IExpr vExpr = EVAL_ENGINE.parse(preprocesInput(tfLeftV.getText()));
-        teXIcon = getIcon("V=", vExpr);
+        IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftV.getText()));
+        teXIcon = TexUtils.getIcon("V=", vExpr);
         spLeft.addIconRow(teXIcon);
 
         // differentiations
-        teXIcon = getIcon(new Function<String, String>() {
+        teXIcon = TexUtils.getIcon(new Function<String, String>() {
             @Override
             public String apply(@Nullable String s) {
                 return s.replaceAll("(bzz\\w+)", "\\\\dot{$1}");
@@ -217,48 +187,21 @@ public class Application {
 
     private void processRightPanel() {
         EvalEngine.set(EVAL_ENGINE);
-        IExpr uExpr = EVAL_ENGINE.parse(preprocesInput(tfRightU.getText()));
-        TeXIcon teXIcon = getIcon("U=", uExpr);
+        IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfRightU.getText()));
+        TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
         spRight.addIconRow(teXIcon);
-        IExpr vExpr = EVAL_ENGINE.parse(preprocesInput(tfRightV.getText()));
-        teXIcon = getIcon("V=", vExpr);
+        IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfRightV.getText()));
+        teXIcon = TexUtils.getIcon("V=", vExpr);
         spRight.addIconRow(teXIcon);
 
         // differentiations
-        teXIcon = getIcon(new Function<String, String>() {
+        teXIcon = TexUtils.getIcon(new Function<String, String>() {
             @Override
             public String apply(@Nullable String s) {
                 return s.replaceAll("(bzz\\w+)", "\\\\dot{$1}");
             }
         }, "\\dot{V}=", vExpr);
         spRight.addIconRow(teXIcon);
-    }
-
-    private String preprocesInput(String text) {
-        StringBuilder result = new StringBuilder();
-        Pattern pattern = Pattern.compile("(\\w+)_([\\d\\w]+)");
-        Matcher matcher = pattern.matcher(text);
-        int previous = 0;
-        int start;
-        int end;
-        while (matcher.find()) {
-            String group = matcher.group();
-            start = matcher.start();
-            end = matcher.end();
-            result.append(text.substring(previous, start));
-            previous = end;
-            String replacement;
-            if (replacements.containsKey(group)) {
-                replacement = replacements.get(group);
-            } else {
-                replacement = matcher.group(1) + "zz" + Utils.generateString(3);
-                replacements.put(group, replacement);
-                texReplacements.put(replacement, matcher.group(1) + "_{" + matcher.group(2) + "}");
-            }
-            result.append(replacement);
-        }
-        result.append(text.substring(previous, text.length()));
-        return result.toString();
     }
 
     private IExpr transform(IExpr srcExpr, Function<IExpr, IExpr> function) {
@@ -279,12 +222,12 @@ public class Application {
     }
 
     private void renderTeX(SolvingPanel panel, String tex) {
-        panel.addIcon(getIcon(tex));
+        panel.addIcon(TexUtils.getIcon(tex));
     }
 
     private void render(SolvingPanel panel, IExpr expr) {
         if (!expr.isList()) {
-            TeXIcon teXIcon = getIcon(expr);
+            TeXIcon teXIcon = TexUtils.getIcon(expr);
             panel.addIcon(teXIcon);
         } else {
             AST ast = (AST) expr;
@@ -292,22 +235,9 @@ public class Application {
             if (result != null && !ast.get(1).isList()) {
                 panel.addRow();
                 String bold = "\\mathbf{";
-                panel.addIcon(renderTeX(bold + toTeX(ast.get(1)) + "=" + toTeX(result) + "}"));
+                panel.addIcon(TexUtils.renderTeX(bold + TexUtils.toTeX(ast.get(1)) + "=" + TexUtils.toTeX(result) + "}"));
             }
         }
-    }
-
-    private TeXIcon getIcon(Object... expr) {
-        String tex = toTeX(expr);
-        return renderTeX(tex);
-    }
-
-    private TeXIcon getIcon(Function<String, String> postProcessor, Object... expr) {
-        String tex = toTeX(expr);
-        if (postProcessor != null) {
-            return renderTeX(postProcessor.apply(tex));
-        }
-        return renderTeX(tex);
     }
 
     private IExpr renderInternal(SolvingPanel panel, AST expr, boolean drawConsequence) {
@@ -323,24 +253,24 @@ public class Application {
                 panel.addRow();
                 if (last != null) {
                     if (isNotLast) {
-                        panel.addIcon(getIcon(last, "="));
+                        panel.addIcon(TexUtils.getIcon(last, "="));
                     } else {
-                        panel.addIcon(getIcon(last));
+                        panel.addIcon(TexUtils.getIcon(last));
                     }
                 }
             } else {
                 last = iExpr;
                 if (isNotLast) {
                     if (!expr.get(i + 1).isList()) {
-                        panel.addIcon(getIcon(iExpr, "="));
+                        panel.addIcon(TexUtils.getIcon(iExpr, "="));
                     } else {
-                        panel.addIcon(getIcon(iExpr));
+                        panel.addIcon(TexUtils.getIcon(iExpr));
                     }
                 } else {
                     if (drawConsequence) {
-                        panel.addIcon(getIcon(iExpr, "\\Rightarrow"));
+                        panel.addIcon(TexUtils.getIcon(iExpr, "\\Rightarrow"));
                     } else {
-                        panel.addIcon(getIcon(iExpr));
+                        panel.addIcon(TexUtils.getIcon(iExpr));
                     }
                 }
             }
