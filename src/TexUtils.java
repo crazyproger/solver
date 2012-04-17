@@ -32,11 +32,11 @@ public class TexUtils {
             result.append(text.substring(previous, start));
             previous = end;
             String replacement;
-            if (Application.replacements.containsKey(group)) {
-                replacement = Application.replacements.get(group);
+            if (Application.inputReplacements.containsKey(group)) {
+                replacement = Application.inputReplacements.get(group);
             } else {
                 replacement = matcher.group(1) + "zz" + Utils.generateString(3);
-                Application.replacements.put(group, replacement);
+                Application.inputReplacements.put(group, replacement);
                 Application.texReplacements.put(replacement, matcher.group(1) + "_{" + matcher.group(2) + "}");
             }
             result.append(replacement);

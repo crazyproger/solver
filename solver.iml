@@ -13,6 +13,15 @@
     <orderEntry type="library" scope="RUNTIME" name="lib" level="project" />
     <orderEntry type="module" module-name="matheclipse-generic" />
     <orderEntry type="library" name="symja" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///opt/IntelliJ/idea-IC/lib/forms_rt.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
