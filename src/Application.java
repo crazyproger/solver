@@ -8,6 +8,7 @@ import org.matheclipse.core.eval.EvalEngine;
 import org.matheclipse.core.eval.TimeConstrainedEvaluator;
 import org.matheclipse.core.expression.AST;
 import org.matheclipse.core.expression.F;
+import org.matheclipse.core.expression.Symbol;
 import org.matheclipse.core.form.output.StringBufferWriter;
 import org.matheclipse.core.interfaces.IExpr;
 import org.matheclipse.core.util.WriterOutputStream;
@@ -27,6 +28,41 @@ import java.util.Map;
 
 public class Application {
 
+    public static final String DDTB_UI = "ddtbzzui";
+    public static final String DDTB_VI = "ddtbzzvi";
+    public static final Symbol DDTB_UJ = new Symbol("ddtbzzuj");
+
+    public static final Function<IExpr, IExpr> B_FIRST_DERIV = new Function<IExpr, IExpr>() {
+        @Override
+        public IExpr apply(@Nullable IExpr iExpr) {
+            if (iExpr != null && iExpr.isSymbol()) {
+                if (iExpr.isSame(new Symbol("bzzvi"))) {
+                    return new Symbol(DDTB_VI);
+                } else if (iExpr.isSame(new Symbol("bzzui"))) {
+                    return new Symbol(DDTB_UI);
+                }
+            }
+            return iExpr;
+        }
+    };
+    public static final Function<IExpr, IExpr> I_TO_J_FUNCTION = new Function<IExpr, IExpr>() {
+        @Override
+        public IExpr apply(@Nullable IExpr iExpr) {
+            if (iExpr != null) {
+                if (iExpr.isSymbol()) {
+                    Symbol symbol = (Symbol) iExpr;
+                    String str = symbol.getSymbol();
+                    if (str.equals("i")) {
+                        return new Symbol("j");
+                    } else if (str.matches("\\w+zz\\w*i\\w*")) {
+                        return new Symbol(str.replaceAll("i", "j"));
+                    }
+                }
+            }
+            return iExpr;
+        }
+    };
+    public static final Symbol DDTB_VJ = new Symbol("ddtbzzvj");
     private JButton bExit;
     private JButton bCalculate;
     private JPanel lagrangePanel;
@@ -70,7 +106,7 @@ public class Application {
     private TimeConstrainedEvaluator EVAL;
     public static final float FONT_SIZE_TEX = 24;
 
-    public static final Function<IExpr, IExpr> SUM_PREDICATE = new Function<IExpr, IExpr>() {
+    public static final Function<IExpr, IExpr> REMOVE_SUM_FUNCTION = new Function<IExpr, IExpr>() {
         @Override
         public IExpr apply(@Nullable IExpr iExpr) {
             if (F.Sum.isSame(iExpr.head())) {
@@ -82,7 +118,7 @@ public class Application {
 
     public static BiMap<String, String> inputReplacements = HashBiMap.create();
     public static BiMap<String, String> texReplacements = HashBiMap.create();
-    public Map<String, IExpr> solvedExpressions = new HashMap<>();
+    public Map<String, IExpr> memory = new HashMap<>();
 
 
     public Application() {
@@ -108,13 +144,30 @@ public class Application {
 
         initEngine();
 
-        texReplacements.put("ddt(\\wzz\\w+)", "\\\\dot{$1}");
-
+        inputReplacements.put("b_ui", "bzzui");
         inputReplacements.put("b_ui", "bzzui");
         inputReplacements.put("b_vi", "bzzvi");
+        inputReplacements.put("b_vi", "bzzvi");
+        inputReplacements.put("D\\[V,t\\]", "ddtVzz");
+        inputReplacements.put("D\\[U,t\\]", "ddtUzz");
 
-        texReplacements.put("bzzui", "b_\\{ui\\}");
+//        texReplacements.put(DDTB_UI, "\\\\dot{b_\\{ui\\}}");
+//        texReplacements.put("ddtbzzuj", "\\\\dot{b_\\{uj\\}}");
+//        texReplacements.put(DDTB_VI, "\\\\dot{b_\\{vi\\}}");
+//        texReplacements.put("ddtbzzvj", "\\\\dot{b_\\{vj\\}}");
+//        texReplacements.put("ddtVzz", "\\\\dot{V}");
+//        texReplacements.put("ddtUzz", "\\\\dot{U}");
+
+        texReplacements.put("Uzz", "U");
+        texReplacements.put("Vzz", "V");
         texReplacements.put("bzzvi", "b_\\{vi\\}");
+        texReplacements.put("bzzui", "b_\\{ui\\}");
+        texReplacements.put("bzzvj", "b_\\{vj\\}");
+        texReplacements.put("bzzuj", "b_\\{uj\\}");
+
+        texReplacements.put("ddt(\\wzz\\w*)", "\\\\dot{$1}");
+//        texReplacements.put("ddtVzz", "\\\\dot{V}");
+//        texReplacements.put("ddtUzz", "\\\\dot{V}");
 
 //        texReplacements.put("dot\\w", "\\\\dov")
 
@@ -180,24 +233,49 @@ public class Application {
     private void processLeftPanel() {
         EvalEngine.set(EVAL_ENGINE);
         IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftU.getText()));
+        memory.put("Uzz", uExpr);
         TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
         spLeft.addIconRow(teXIcon);
         IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftV.getText()));
+        memory.put("Vzz", vExpr);
         teXIcon = TexUtils.getIcon("V=", vExpr);
         spLeft.addIconRow(teXIcon);
 
         // differentiations
-        teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{V}=", vExpr);
+        IExpr ddtV = transform(vExpr, B_FIRST_DERIV);
+        teXIcon = TexUtils.getIcon("ddtVzz=", ddtV);
+        memory.put("ddtVzz", ddtV);
         spLeft.addIconRow(teXIcon);
-        teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{U}=", uExpr);
+
+        IExpr ddtU = transform(uExpr, B_FIRST_DERIV);
+        teXIcon = TexUtils.getIcon("ddtUzz=", ddtU);
+        memory.put("ddtUzz", ddtU);
         spLeft.addIconRow(teXIcon);
 
         // partial differentiations
-        IExpr uDExpr = transform(uExpr, SUM_PREDICATE);
-        IExpr vDExpr = transform(vExpr, SUM_PREDICATE);
-//        teXIcon = getIcon("\\dot{V}/=", vDExpr);
-//        spLeft.addIconRow(teXIcon);
+        IExpr ddtUieqj = transforms(ddtU, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr ddtbujddtU = F.eval(F.D, ddtUieqj, DDTB_UJ);
+        IExpr ddtbvjddtU = F.eval(F.D, ddtUieqj, DDTB_VJ);
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzuj}}=", ddtbujddtU));
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtU));
 
+        IExpr ddtVieqj = transforms(ddtV, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr ddtbujddtV = F.eval(F.D, ddtVieqj, DDTB_UJ);
+        IExpr ddtbvjddtV = F.eval(F.D, ddtVieqj, DDTB_VJ);
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzuj}}=", ddtbujddtV));
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtV));
+
+        IExpr Uieqj = transforms(uExpr, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr ddtbujUzz = F.eval(F.D, Uieqj, DDTB_UJ);
+        IExpr ddtbvjUzz = F.eval(F.D, Uieqj, DDTB_VJ);
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzuj}}=", ddtbujUzz));
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzvj}}=", ddtbvjUzz));
+
+        IExpr Vieqj = transforms(vExpr, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr ddtbujVzz = F.eval(F.D, Vieqj, DDTB_UJ);
+        IExpr ddtbvjVzz = F.eval(F.D, Vieqj, DDTB_VJ);
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzuj}}=", ddtbujVzz));
+        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzvj}}=", ddtbvjVzz));
     }
 
     private void processRightPanel() {
@@ -212,6 +290,14 @@ public class Application {
         // differentiations
         teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{V}=", vExpr);
         spRight.addIconRow(teXIcon);
+    }
+
+    private IExpr transforms(IExpr srcExpr, Function<IExpr, IExpr>... functions) {
+        IExpr result = srcExpr;
+        for (Function<IExpr, IExpr> function : functions) {
+            result = transform(result, function);
+        }
+        return result;
     }
 
     private IExpr transform(IExpr srcExpr, Function<IExpr, IExpr> function) {
