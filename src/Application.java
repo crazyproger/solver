@@ -1,6 +1,4 @@
 import com.google.common.base.Function;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -24,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Application {
@@ -31,6 +30,7 @@ public class Application {
     public static final String DDTB_UI = "ddtbzzui";
     public static final String DDTB_VI = "ddtbzzvi";
     public static final Symbol DDTB_UJ = new Symbol("ddtbzzuj");
+    public static final Symbol DDTB_VJ = new Symbol("ddtbzzvj");
 
     public static final Function<IExpr, IExpr> B_FIRST_DERIV = new Function<IExpr, IExpr>() {
         @Override
@@ -45,6 +45,7 @@ public class Application {
             return iExpr;
         }
     };
+
     public static final Function<IExpr, IExpr> I_TO_J_FUNCTION = new Function<IExpr, IExpr>() {
         @Override
         public IExpr apply(@Nullable IExpr iExpr) {
@@ -62,7 +63,18 @@ public class Application {
             return iExpr;
         }
     };
-    public static final Symbol DDTB_VJ = new Symbol("ddtbzzvj");
+
+    public static final Function<IExpr, IExpr> REMOVE_SUM_FUNCTION = new Function<IExpr, IExpr>() {
+        @Override
+        public IExpr apply(@Nullable IExpr iExpr) {
+            if (F.Sum.isSame(iExpr.head())) {
+                return iExpr.getAt(1);
+            }
+            return iExpr;
+        }
+    };
+
+
     private JButton bExit;
     private JButton bCalculate;
     private JPanel lagrangePanel;
@@ -106,18 +118,8 @@ public class Application {
     private TimeConstrainedEvaluator EVAL;
     public static final float FONT_SIZE_TEX = 24;
 
-    public static final Function<IExpr, IExpr> REMOVE_SUM_FUNCTION = new Function<IExpr, IExpr>() {
-        @Override
-        public IExpr apply(@Nullable IExpr iExpr) {
-            if (F.Sum.isSame(iExpr.head())) {
-                return iExpr.getAt(1);
-            }
-            return iExpr;
-        }
-    };
-
-    public static BiMap<String, String> inputReplacements = HashBiMap.create();
-    public static BiMap<String, String> texReplacements = HashBiMap.create();
+    public static Map<String, String> inputReplacements = new LinkedHashMap<>();
+    public static Map<String, String> texReplacements = new LinkedHashMap<>();
     public Map<String, IExpr> memory = new HashMap<>();
 
 
@@ -150,6 +152,7 @@ public class Application {
         inputReplacements.put("b_vi", "bzzvi");
         inputReplacements.put("D\\[V,t\\]", "ddtVzz");
         inputReplacements.put("D\\[U,t\\]", "ddtUzz");
+        inputReplacements.put("Q", "THeta");
 
 //        texReplacements.put(DDTB_UI, "\\\\dot{b_\\{ui\\}}");
 //        texReplacements.put("ddtbzzuj", "\\\\dot{b_\\{uj\\}}");
@@ -157,15 +160,19 @@ public class Application {
 //        texReplacements.put("ddtbzzvj", "\\\\dot{b_\\{vj\\}}");
 //        texReplacements.put("ddtVzz", "\\\\dot{V}");
 //        texReplacements.put("ddtUzz", "\\\\dot{U}");
-
+        texReplacements.put("ddt(\\wzz\\w*)", "\\\\dot{$1}");
         texReplacements.put("Uzz", "U");
         texReplacements.put("Vzz", "V");
         texReplacements.put("bzzvi", "b_\\{vi\\}");
         texReplacements.put("bzzui", "b_\\{ui\\}");
         texReplacements.put("bzzvj", "b_\\{vj\\}");
         texReplacements.put("bzzuj", "b_\\{uj\\}");
+        texReplacements.put("OM", "\\\\Omega");
+        texReplacements.put("pi", "\\\\pi");
+        texReplacements.put("PSI", "\\\\Psi");
+        texReplacements.put("nu", "\\\\nu");
+        texReplacements.put("THeta", "\\\\Theta");
 
-        texReplacements.put("ddt(\\wzz\\w*)", "\\\\dot{$1}");
 //        texReplacements.put("ddtVzz", "\\\\dot{V}");
 //        texReplacements.put("ddtUzz", "\\\\dot{V}");
 
@@ -222,9 +229,9 @@ public class Application {
         processRightPanel();
 
         // use evalTrace method
-        String testExpr = tfTest.getText();
-        final IExpr expr = EVAL.constrainedEval(buf0, testExpr, true);
-        render(spCenter, expr);
+//        String testExpr = tfTest.getText();
+//        final IExpr expr = EVAL.constrainedEval(buf0, testExpr, true);
+//        render(spCenter, expr);
 
         System.out.println(buf0.toString());
         System.out.println(pout.toString());
@@ -276,6 +283,33 @@ public class Application {
         IExpr ddtbvjVzz = F.eval(F.D, Vieqj, DDTB_VJ);
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzuj}}=", ddtbujVzz));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzvj}}=", ddtbvjVzz));
+
+        ///////////////////////////////
+
+        IExpr tExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfT.getText()));
+        spCenter.addIconRow(TexUtils.getIcon("T=", tExpr));
+
+        IExpr subIntegralPart = getSubIntegralPart(tExpr);
+        if (subIntegralPart == null) {
+            subIntegralPart = tExpr;
+        }
+
+
+    }
+
+    private IExpr getSubIntegralPart(IExpr expr) {
+        if (expr.isAST()) {
+            if (expr.head().isSame(F.Integrate)) {
+                return expr.getAt(1);
+            }
+            for (IExpr el : (AST) expr) {
+                IExpr result = getSubIntegralPart(el);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
     private void processRightPanel() {
@@ -472,13 +506,13 @@ public class Application {
         label2.setText("T=");
         panel3.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         tfT = new JTextField();
-        tfT.setText("1/2Y(Integrate[((D[V,t]+OM*R+OM*U)^2+(D[U,t]-OM*V)^2),{x,0,2*pi}])");
+        tfT.setText("1/2*PSI*(Integrate[((D[V,t]+OM*R+OM*U)^2+(D[U,t]-OM*V)^2),{x,0,2*pi}])");
         panel3.add(tfT, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label3 = new JLabel();
         label3.setText("П=");
         panel3.add(label3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         tfP = new JTextField();
-        tfP.setText("M/2*Integrate[(D[V,Q]-D^2[U,Q^2]),{x,0,2*pi}]+vi/2*Integrate[(D[V,Q]+U)^2,{x,0,2*pi}]");
+        tfP.setText("M/2*Integrate[(D[V,Q]-D^2[U,Q^2]),{x,0,2*pi}]+nu/2*Integrate[(D[V,Q]+U)^2,{x,0,2*pi}]");
         panel3.add(tfP, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));

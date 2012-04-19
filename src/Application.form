@@ -66,7 +66,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="1/2Y(Integrate[((D[V,t]+OM*R+OM*U)^2+(D[U,t]-OM*V)^2),{x,0,2*pi}])"/>
+                  <text value="1/2*PSI*(Integrate[((D[V,t]+OM*R+OM*U)^2+(D[U,t]-OM*V)^2),{x,0,2*pi}])"/>
                 </properties>
               </component>
               <component id="e196" class="javax.swing.JLabel">
@@ -84,7 +84,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="M/2*Integrate[(D[V,Q]-D^2[U,Q^2]),{x,0,2*pi}]+vi/2*Integrate[(D[V,Q]+U)^2,{x,0,2*pi}]"/>
+                  <text value="M/2*Integrate[(D[V,Q]-D^2[U,Q^2]),{x,0,2*pi}]+nu/2*Integrate[(D[V,Q]+U)^2,{x,0,2*pi}]"/>
                 </properties>
               </component>
             </children>

@@ -42,14 +42,11 @@ public class TexUtils {
             result.append(replacement);
         }
         result.append(text.substring(previous, text.length()));
-        return result.toString();
+        return replaceByMap(result.toString(), Application.inputReplacements);
     }
 
     public static TeXIcon renderTeX(String tex) {
-        String result = tex;
-        for (Map.Entry<String, String> entry : Application.texReplacements.entrySet()) {
-            result = result.replaceAll(entry.getKey(), entry.getValue());
-        }
+        String result = replaceByMap(tex, Application.texReplacements);
         try {
             TeXFormula formula = new TeXFormula(result);
             return formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, Application.FONT_SIZE_TEX, TeXConstants.UNIT_PIXEL, 80,
@@ -58,6 +55,14 @@ public class TexUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static String replaceByMap(String tex, Map<String, String> replacements) {
+        String result = tex;
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            result = result.replaceAll(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 
     public static String toTeX(Object... mathML) {
