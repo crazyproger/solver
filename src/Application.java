@@ -6,8 +6,10 @@ import org.matheclipse.core.eval.EvalEngine;
 import org.matheclipse.core.eval.TimeConstrainedEvaluator;
 import org.matheclipse.core.expression.AST;
 import org.matheclipse.core.expression.F;
+import org.matheclipse.core.expression.IntegerSym;
 import org.matheclipse.core.expression.Symbol;
 import org.matheclipse.core.form.output.StringBufferWriter;
+import org.matheclipse.core.interfaces.IAST;
 import org.matheclipse.core.interfaces.IExpr;
 import org.matheclipse.core.util.WriterOutputStream;
 import org.scilab.forge.jlatexmath.DefaultTeXFont;
@@ -121,6 +123,7 @@ public class Application {
     public static Map<String, String> inputReplacements = new LinkedHashMap<>();
     public static Map<String, String> texReplacements = new LinkedHashMap<>();
     public Map<String, IExpr> memory = new HashMap<>();
+    public Map<String, IExpr> globalMemory = new HashMap<>();
 
 
     public Application() {
@@ -234,17 +237,18 @@ public class Application {
 //        render(spCenter, expr);
 
         System.out.println(buf0.toString());
-        System.out.println(pout.toString());
     }
 
     private void processLeftPanel() {
         EvalEngine.set(EVAL_ENGINE);
         IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftU.getText()));
         memory.put("Uzz", uExpr);
+        memory.put("U", uExpr);
         TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
         spLeft.addIconRow(teXIcon);
         IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftV.getText()));
         memory.put("Vzz", vExpr);
+        memory.put("V", vExpr);
         teXIcon = TexUtils.getIcon("V=", vExpr);
         spLeft.addIconRow(teXIcon);
 
@@ -289,12 +293,56 @@ public class Application {
         IExpr tExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfT.getText()));
         spCenter.addIconRow(TexUtils.getIcon("T=", tExpr));
 
-        IExpr subIntegralPart = getSubIntegralPart(tExpr);
-        if (subIntegralPart == null) {
-            subIntegralPart = tExpr;
+        IExpr omega = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfQLeft.getText()));
+        memory.put("THeta", omega);
+
+        processIntegral("T", tExpr, memory, F.C0, F.Times(IntegerSym.valueOf(2), new Symbol("alpha")));
+
+    }
+
+    private void processIntegral(String key, IExpr expr, final Map<String, IExpr> memory, final IExpr leftLimit, final IExpr rightLimit) {
+        IExpr substituted = transforms(expr, new Function<IExpr, IExpr>() {
+                    @Override
+                    public IExpr apply(@Nullable IExpr iExpr) {
+                        if (iExpr.isSymbol()) {
+                            String key = ((Symbol) iExpr).getSymbol();
+                            if (memory.containsKey(key)) {
+                                return memory.get(key);
+                            }
+                        }
+                        return iExpr;
+                    }
+                }, new Function<IExpr, IExpr>() {
+                    @Override
+                    public IExpr apply(@Nullable IExpr iExpr) {
+                        if (iExpr != null) {
+                            if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
+                                IAST integralParams = F.List(iExpr.getAt(2).getAt(1), leftLimit, rightLimit);
+                                return F.Integrate(F.D(iExpr.getAt(1), DDTB_UJ), integralParams);
+                            }
+                        }
+                        return iExpr;
+                    }
+                }
+        );
+        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", substituted));
+
+        IExpr debugEval = null;
+        try {
+            EVAL.fTraceEvaluation = true;
+            debugEval = EVAL.constrainedEval(new StringBufferWriter(), substituted);
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        render(spCenter, debugEval);
+
+//        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(substituted)));
 
 
+//        IExpr subIntegralPart = getSubIntegralPart(expr);
+//        if (subIntegralPart == null) {
+//            subIntegralPart = expr;
+//        }
     }
 
     private IExpr getSubIntegralPart(IExpr expr) {

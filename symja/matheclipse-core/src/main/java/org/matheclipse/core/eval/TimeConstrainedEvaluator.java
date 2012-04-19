@@ -29,7 +29,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
 
     private final boolean fRelaxedSyntax;
 
-    private boolean fTraceEvaluation;
+    public boolean fTraceEvaluation;
 
     public TimeConstrainedEvaluator(final EvalEngine evalEngine, final boolean msie, final long milliSeconds) {
         this(evalEngine, msie, milliSeconds, false);
