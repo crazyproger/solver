@@ -19,10 +19,11 @@ public class D extends AbstractConverter {
 	public boolean convert(final StringBuffer buf, final IAST f, final int precedence) {
 		if (f.size() == 3) {
 
-			buf.append("\\frac{d}{{d");
-			fFactory.convert(buf, f.get(2), 0);
-			buf.append("}}");
-			fFactory.convert(buf, f.get(1), 0);
+			buf.append("\\frac{d\\left(");
+            fFactory.convert(buf, f.get(1), 0);
+            buf.append("\\right)}{{d");
+            fFactory.convert(buf, f.get(2), 0);
+            buf.append("}}");
 
 			return true;
 		}
