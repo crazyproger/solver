@@ -95,8 +95,8 @@ public class Integrate extends AbstractFunctionEvaluator implements IConstantHea
 			return ast.range(2).foldRight(new BinaryEval(F.Integrate), fx);
 		}
 
-		if (ast.get(1).isAST()) {
-			fx = F.evalExpandAll(ast.get(1));
+		if (fx.isAST()) {
+			fx = F.evalExpandAll(fx);
 			if (fx.isPlus()) {
 				// Integrate[a_+b_+...,x_] -> Integrate[a,x]+Integrate[b,x]+...
 				return ((IAST) fx).map(Functors.replace1st(F.Integrate(F.Null, ast.get(2))));
@@ -135,6 +135,13 @@ public class Integrate extends AbstractFunctionEvaluator implements IConstantHea
 			}
 		}
 
+        if (fx.isAST() && F.Sum.equals(fx.head())) {
+            IAST sumVar = (IAST) fx.getAt(2);
+            if (sumVar.isVector() == 3) {
+                return F.eval(F.Sum(F.Integrate(fx.getAt(1), ast.getAt(3)), sumVar));
+            }
+        }
+
 		if (ast.get(2).isSymbol()) {
 			final ISymbol symbol = (ISymbol) ast.get(2);
 			if (fx.isNumber()) {
@@ -162,7 +169,26 @@ public class Integrate extends AbstractFunctionEvaluator implements IConstantHea
 				}
 
 				if (arg1.isTimes()) {
-					// Integrate[a_*y_,x_Symbol] -> a*Integrate[y,x] /; FreeQ[a,x]
+                    boolean containsSum = false;
+                    IExpr sumArg = null;
+                    for (int i = 1; i < arg1.size(); i++) {
+                        IExpr iExpr = arg1.getAt(i);
+                        if (iExpr != null && iExpr.isAST() && F.Sum.equals(iExpr.head())) {
+                            containsSum = true;
+                            sumArg = iExpr.getAt(2);
+                        }
+                    }
+                    if (containsSum) {
+                        // remove sum from Times
+                        arg1.filter(F.ast(F.Times),new Predicate<IExpr>() {
+                            @Override
+                            public boolean apply(IExpr iExpr) {
+                                return iExpr == null || !iExpr.isList() || !F.Sum.equals(iExpr.head());
+                            }
+                        });
+                        return F.eval(F.Sum(F.Integrate(arg1, ast.getAt(2)), sumArg));
+                    }
+                    // Integrate[a_*y_,x_Symbol] -> a*Integrate[y,x] /; FreeQ[a,x]
 					IAST filterCollector = F.Times();
 					IAST restCollector = F.Times();
 					arg1.filter(filterCollector, restCollector, new Predicate<IExpr>() {
@@ -183,7 +209,7 @@ public class Integrate extends AbstractFunctionEvaluator implements IConstantHea
 					}
 				}
 
-				if (!ast.get(1).equals(fx)) {
+				if (!fx.equals(fx)) {
 					IAST clon = ast.clone();
 					clon.set(1, fx);
 					return clon;
