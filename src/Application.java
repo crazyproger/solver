@@ -467,8 +467,8 @@ public class Application {
                     panel.addRow();
                 }
                 renderInternal(panel, (AST) iExpr, true);
-                panel.addRow();
                 if (last != null) {
+                    panel.addRow();
                     if (isNotLast) {
                         panel.addIcon(TexUtils.getIcon(last, "="));
                     } else {
