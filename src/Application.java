@@ -23,6 +23,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,6 +34,9 @@ public class Application {
     public static final String DDTB_VI = "ddtbzzvi";
     public static final Symbol DDTB_UJ = new Symbol("ddtbzzuj");
     public static final Symbol DDTB_VJ = new Symbol("ddtbzzvj");
+    //    public static final Symbol B_VJ = new Symbol("ddtbzzvj");
+    public static final Symbol B_UI = new Symbol("bzzui");
+    public static final Symbol B_VI = new Symbol("bzzvi");
 
     public static final Symbol U = new Symbol("U");
     public static final Symbol V = new Symbol("V");
@@ -125,7 +129,7 @@ public class Application {
 
     public static Map<String, String> inputReplacements = new LinkedHashMap<>();
     public static Map<String, String> texReplacements = new LinkedHashMap<>();
-    public Map<String, IExpr> memory = new HashMap<>();
+    public Map<IExpr, IExpr> memory = new HashMap<>();
     public Map<String, IExpr> globalMemory = new HashMap<>();
 
 
@@ -245,49 +249,59 @@ public class Application {
     private void processLeftPanel() {
         EvalEngine.set(EVAL_ENGINE);
         IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftU.getText()));
-        memory.put("Uzz", uExpr);
-        memory.put("U", uExpr);
+        IAST uAST = F.ast(U);
+        uAST.add(B_UI);
+        memory.put(uAST, uExpr);
         TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
         spLeft.addIconRow(teXIcon);
         IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftV.getText()));
-        memory.put("Vzz", vExpr);
-        memory.put("V", vExpr);
+        IAST vAST = F.ast(V);
+        vAST.add(B_VI);
+        memory.put(vAST, vExpr);
         teXIcon = TexUtils.getIcon("V=", vExpr);
         spLeft.addIconRow(teXIcon);
 
         // differentiations
         IExpr ddtV = transform(vExpr, B_FIRST_DERIV);
         teXIcon = TexUtils.getIcon("ddtVzz=", ddtV);
-        memory.put("ddtVzz", ddtV);
+        memory.put(DDT_V, ddtV);
         spLeft.addIconRow(teXIcon);
 
         IExpr ddtU = transform(uExpr, B_FIRST_DERIV);
         teXIcon = TexUtils.getIcon("ddtUzz=", ddtU);
-        memory.put("ddtUzz", ddtU);
+        memory.put(DDT_U, ddtU);
         spLeft.addIconRow(teXIcon);
 
         // partial differentiations
         IExpr ddtUieqj = transforms(ddtU, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
         IExpr ddtbujddtU = F.eval(F.D, ddtUieqj, DDTB_UJ);
+        memory.put(F.D(DDT_U, DDTB_UJ), ddtbujddtU);
         IExpr ddtbvjddtU = F.eval(F.D, ddtUieqj, DDTB_VJ);
+        memory.put(F.D(DDT_U, DDTB_VJ), ddtbvjddtU);
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzuj}}=", ddtbujddtU));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtU));
 
         IExpr ddtVieqj = transforms(ddtV, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
         IExpr ddtbujddtV = F.eval(F.D, ddtVieqj, DDTB_UJ);
+        memory.put(F.D(DDT_V, DDTB_UJ), ddtbujddtV);
         IExpr ddtbvjddtV = F.eval(F.D, ddtVieqj, DDTB_VJ);
+        memory.put(F.D(DDT_V, DDTB_VJ), ddtbvjddtV);
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzuj}}=", ddtbujddtV));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtV));
 
         IExpr Uieqj = transforms(uExpr, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
         IExpr ddtbujUzz = F.eval(F.D, Uieqj, DDTB_UJ);
+        memory.put(F.D(U, DDTB_UJ), ddtbujUzz);
         IExpr ddtbvjUzz = F.eval(F.D, Uieqj, DDTB_VJ);
+        memory.put(F.D(U, DDTB_VJ), ddtbvjUzz);
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzuj}}=", ddtbujUzz));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzvj}}=", ddtbvjUzz));
 
         IExpr Vieqj = transforms(vExpr, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
         IExpr ddtbujVzz = F.eval(F.D, Vieqj, DDTB_UJ);
+        memory.put(F.D(V, DDTB_UJ), ddtbujVzz);
         IExpr ddtbvjVzz = F.eval(F.D, Vieqj, DDTB_VJ);
+        memory.put(F.D(V, DDTB_VJ), ddtbvjVzz);
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzuj}}=", ddtbujVzz));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzvj}}=", ddtbvjVzz));
 
@@ -297,13 +311,19 @@ public class Application {
         spCenter.addIconRow(TexUtils.getIcon("T=", tExpr));
 
         IExpr omega = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfQLeft.getText()));
-        memory.put("THeta", omega);
+        memory.put(new Symbol("THeta"), omega);
 
         processIntegral("T", tExpr, memory, F.C0, F.Times(IntegerSym.valueOf(2), new Symbol("alpha")));
 
     }
 
-    private void processIntegral(String key, IExpr expr, final Map<String, IExpr> memory, final IExpr leftLimit, final IExpr rightLimit) {
+    private static IAST ast(IExpr first, IExpr... exprs) {
+        IAST ast = F.ast(first);
+        Collections.addAll(ast, exprs);
+        return ast;
+    }
+
+    private void processIntegral(String key, IExpr expr, final Map<IExpr, IExpr> memory, final IExpr leftLimit, final IExpr rightLimit) {
 
         IExpr differentiated = transform(expr, new Function<IExpr, IExpr>() {
             @Override
@@ -312,7 +332,7 @@ public class Application {
                     IExpr subIntegrPart = iExpr.getAt(1);
                     IExpr prepared = transform(subIntegrPart, new Function<IExpr, IExpr>() {
                         @Override
-                        public IExpr apply(@Nullable IExpr iExpr) {
+                        public IExpr apply(IExpr iExpr) {
                             if (iExpr.isSymbol()) {
                                 if (U.isSame(iExpr) || V.isSame(iExpr) || DDT_U.isSame(iExpr) || DDT_V.isSame(iExpr)) {
                                     IAST ast = F.ast(iExpr);
@@ -324,7 +344,18 @@ public class Application {
                         }
                     });
                     IExpr differentiated = F.eval(F.D(prepared, DDTB_UJ));
-                    return F.Integrate(differentiated, iExpr.getAt(2));
+                    IExpr untransformed = transform(differentiated, new Function<IExpr, IExpr>() {
+                        @Override
+                        public IExpr apply(IExpr iExpr) {
+                            if (iExpr.isAST()) {
+                                if ((U.isSame(iExpr.head()) || V.isSame(iExpr.head()) || DDT_U.isSame(iExpr.head()) || DDT_V.isSame(iExpr.head())) && DDTB_UJ.isSame(iExpr.getAt(1))) {
+                                    return iExpr.head();
+                                }
+                            }
+                            return iExpr;
+                        }
+                    });
+                    return F.Integrate(untransformed, iExpr.getAt(2));
                 }
                 return iExpr;
             }
@@ -335,11 +366,8 @@ public class Application {
         IExpr fullSubstituted = transforms(differentiated, new Function<IExpr, IExpr>() {
                     @Override
                     public IExpr apply(IExpr iExpr) {
-                        if (iExpr.isSymbol()) {
-                            String key = ((Symbol) iExpr).getSymbol();
-                            if (memory.containsKey(key)) {
-                                return memory.get(key);
-                            }
+                        if (memory.containsKey(iExpr)) {
+                            return memory.get(iExpr);
                         }
                         return iExpr;
                     }
@@ -364,29 +392,8 @@ public class Application {
 //            e.printStackTrace();
 //        }
 //        render(spCenter, debugEval);
-
-//        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(fullSubstituted)));
-
-
-//        IExpr subIntegralPart = getSubIntegralPart(expr);
-//        if (subIntegralPart == null) {
-//            subIntegralPart = expr;
-//        }
-    }
-
-    private IExpr getSubIntegralPart(IExpr expr) {
-        if (expr.isAST()) {
-            if (expr.head().isSame(F.Integrate)) {
-                return expr.getAt(1);
-            }
-            for (IExpr el : (AST) expr) {
-                IExpr result = getSubIntegralPart(el);
-                if (result != null) {
-                    return result;
-                }
-            }
-        }
-        return null;
+//
+        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(fullSubstituted)));
     }
 
     private void processRightPanel() {
