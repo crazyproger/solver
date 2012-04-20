@@ -384,16 +384,16 @@ public class Application {
         );
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", fullSubstituted));
 
-//        IExpr debugEval = null;
-//        try {
-//            EVAL.fTraceEvaluation = true;
-//            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        render(spCenter, debugEval);
-//
-        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(fullSubstituted)));
+        IExpr debugEval = null;
+        try {
+            EVAL.fTraceEvaluation = true;
+            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        render(spCenter, debugEval);
+
+//        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(fullSubstituted)));
     }
 
     private void processRightPanel() {
