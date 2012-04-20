@@ -37,7 +37,7 @@ public class Application {
     public static final Function<IExpr, IExpr> B_FIRST_DERIV = new Function<IExpr, IExpr>() {
         @Override
         public IExpr apply(@Nullable IExpr iExpr) {
-            if (iExpr != null && iExpr.isSymbol()) {
+            if (iExpr.isSymbol()) {
                 if (iExpr.isSame(new Symbol("bzzvi"))) {
                     return new Symbol(DDTB_VI);
                 } else if (iExpr.isSame(new Symbol("bzzui"))) {
@@ -51,15 +51,13 @@ public class Application {
     public static final Function<IExpr, IExpr> I_TO_J_FUNCTION = new Function<IExpr, IExpr>() {
         @Override
         public IExpr apply(@Nullable IExpr iExpr) {
-            if (iExpr != null) {
-                if (iExpr.isSymbol()) {
-                    Symbol symbol = (Symbol) iExpr;
-                    String str = symbol.getSymbol();
-                    if (str.equals("i")) {
-                        return new Symbol("j");
-                    } else if (str.matches("\\w+zz\\w*i\\w*")) {
-                        return new Symbol(str.replaceAll("i", "j"));
-                    }
+            if (iExpr.isSymbol()) {
+                Symbol symbol = (Symbol) iExpr;
+                String str = symbol.getSymbol();
+                if (str.equals("i")) {
+                    return new Symbol("j");
+                } else if (str.matches("\\w+zz\\w*i\\w*")) {
+                    return new Symbol(str.replaceAll("i", "j"));
                 }
             }
             return iExpr;
@@ -301,9 +299,20 @@ public class Application {
     }
 
     private void processIntegral(String key, IExpr expr, final Map<String, IExpr> memory, final IExpr leftLimit, final IExpr rightLimit) {
-        IExpr substituted = transforms(expr, new Function<IExpr, IExpr>() {
+
+        IExpr differentiated = transform(expr, new Function<IExpr, IExpr>() {
+            @Override
+            public IExpr apply(IExpr iExpr) {
+                if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
+                    IExpr subIntegrPart = iExpr.getAt(1);
+                }
+                return iExpr;
+            }
+        });
+
+        IExpr fullSubstituted = transforms(differentiated, new Function<IExpr, IExpr>() {
                     @Override
-                    public IExpr apply(@Nullable IExpr iExpr) {
+                    public IExpr apply(IExpr iExpr) {
                         if (iExpr.isSymbol()) {
                             String key = ((Symbol) iExpr).getSymbol();
                             if (memory.containsKey(key)) {
@@ -314,29 +323,27 @@ public class Application {
                     }
                 }, new Function<IExpr, IExpr>() {
                     @Override
-                    public IExpr apply(@Nullable IExpr iExpr) {
-                        if (iExpr != null) {
-                            if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
-                                IAST integralParams = F.List(iExpr.getAt(2).getAt(1), leftLimit, rightLimit);
-                                return F.Integrate(F.D(iExpr.getAt(1), DDTB_UJ), integralParams);
-                            }
+                    public IExpr apply(IExpr iExpr) {
+                        if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
+                            IAST integralParams = F.List(iExpr.getAt(2).getAt(1), leftLimit, rightLimit);
+                            return F.Integrate(F.D(iExpr.getAt(1), DDTB_UJ), integralParams);
                         }
                         return iExpr;
                     }
                 }
         );
-        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", substituted));
+        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", fullSubstituted));
 
         IExpr debugEval = null;
         try {
             EVAL.fTraceEvaluation = true;
-            debugEval = EVAL.constrainedEval(new StringBufferWriter(), substituted);
+            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         render(spCenter, debugEval);
 
-//        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(substituted)));
+//        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(fullSubstituted)));
 
 
 //        IExpr subIntegralPart = getSubIntegralPart(expr);
@@ -374,7 +381,8 @@ public class Application {
         spRight.addIconRow(teXIcon);
     }
 
-    private IExpr transforms(IExpr srcExpr, Function<IExpr, IExpr>... functions) {
+    @SafeVarargs
+    private final IExpr transforms(IExpr srcExpr, Function<IExpr, IExpr>... functions) {
         IExpr result = srcExpr;
         for (Function<IExpr, IExpr> function : functions) {
             result = transform(result, function);
@@ -388,9 +396,11 @@ public class Application {
             AST result = new AST();
             result.set(0, processed.getAt(0));
             for (IExpr expr : (AST) processed) {
-                IExpr filtered = transform(expr, function);
-                if (filtered != null) {
-                    result.add(filtered);
+                if (expr != null) {
+                    IExpr filtered = transform(expr, function);
+                    if (filtered != null) {
+                        result.add(filtered);
+                    }
                 }
             }
             return result;
