@@ -34,6 +34,11 @@ public class Application {
     public static final Symbol DDTB_UJ = new Symbol("ddtbzzuj");
     public static final Symbol DDTB_VJ = new Symbol("ddtbzzvj");
 
+    public static final Symbol U = new Symbol("U");
+    public static final Symbol V = new Symbol("V");
+    public static final Symbol DDT_U = new Symbol("ddtUzz");
+    public static final Symbol DDT_V = new Symbol("ddtVzz");
+
     public static final Function<IExpr, IExpr> B_FIRST_DERIV = new Function<IExpr, IExpr>() {
         @Override
         public IExpr apply(@Nullable IExpr iExpr) {
@@ -305,10 +310,27 @@ public class Application {
             public IExpr apply(IExpr iExpr) {
                 if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
                     IExpr subIntegrPart = iExpr.getAt(1);
+                    IExpr prepared = transform(subIntegrPart, new Function<IExpr, IExpr>() {
+                        @Override
+                        public IExpr apply(@Nullable IExpr iExpr) {
+                            if (iExpr.isSymbol()) {
+                                if (U.isSame(iExpr) || V.isSame(iExpr) || DDT_U.isSame(iExpr) || DDT_V.isSame(iExpr)) {
+                                    IAST ast = F.ast(iExpr);
+                                    ast.add(DDTB_UJ);
+                                    return ast;
+                                }
+                            }
+                            return iExpr;
+                        }
+                    });
+                    IExpr differentiated = F.eval(F.D(prepared, DDTB_UJ));
+                    return F.Integrate(differentiated, iExpr.getAt(2));
                 }
                 return iExpr;
             }
         });
+
+        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", differentiated));
 
         IExpr fullSubstituted = transforms(differentiated, new Function<IExpr, IExpr>() {
                     @Override
@@ -326,7 +348,7 @@ public class Application {
                     public IExpr apply(IExpr iExpr) {
                         if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
                             IAST integralParams = F.List(iExpr.getAt(2).getAt(1), leftLimit, rightLimit);
-                            return F.Integrate(F.D(iExpr.getAt(1), DDTB_UJ), integralParams);
+                            return F.Integrate(iExpr.getAt(1), integralParams);
                         }
                         return iExpr;
                     }
@@ -334,14 +356,14 @@ public class Application {
         );
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", fullSubstituted));
 
-        IExpr debugEval = null;
-        try {
-            EVAL.fTraceEvaluation = true;
-            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        render(spCenter, debugEval);
+//        IExpr debugEval = null;
+//        try {
+//            EVAL.fTraceEvaluation = true;
+//            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        render(spCenter, debugEval);
 
 //        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(fullSubstituted)));
 
