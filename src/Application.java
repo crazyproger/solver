@@ -42,6 +42,9 @@ public class Application {
     public static final Symbol DDT_U = new Symbol("ddtUzz");
     public static final Symbol DDT_V = new Symbol("ddtVzz");
 
+    public static final Symbol THETA = new Symbol("THeta");
+    public static final Symbol ALPHA = new Symbol("alpha");
+
     private JButton bExit;
     private JButton bCalculate;
     private JPanel lagrangePanel;
@@ -87,7 +90,6 @@ public class Application {
 
     public static Map<String, String> inputReplacements = new LinkedHashMap<>();
     public static Map<String, String> texReplacements = new LinkedHashMap<>();
-    public Map<IExpr, IExpr> memory = new HashMap<>();
     public Map<String, IExpr> globalMemory = new HashMap<>();
 
 
@@ -135,7 +137,6 @@ public class Application {
         texReplacements.put("nu", "\\\\nu");
         texReplacements.put("THeta", "\\\\Theta");
 
-        // todo for test
         try {
             calculate();
         } catch (Exception e) {
@@ -194,15 +195,13 @@ public class Application {
 
     private void processLeftPanel() {
         EvalEngine.set(EVAL_ENGINE);
+        Map<IExpr, IExpr> memory = new HashMap<>();
+
         IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftU.getText()));
-        IAST uAST = F.ast(U);
-        uAST.add(B_UI);
         memory.put(U, uExpr);
         TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
         spLeft.addIconRow(teXIcon);
         IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftV.getText()));
-        IAST vAST = F.ast(V);
-        vAST.add(B_VI);
         memory.put(V, vExpr);
         teXIcon = TexUtils.getIcon("V=", vExpr);
         spLeft.addIconRow(teXIcon);
@@ -257,9 +256,9 @@ public class Application {
         spCenter.addIconRow(TexUtils.getIcon("T=", tExpr));
 
         IExpr omega = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfQLeft.getText()));
-        memory.put(new Symbol("THeta"), omega);
+        memory.put(THETA, omega);
 
-        processIntegral("T", tExpr, memory, F.C0, F.Times(IntegerSym.valueOf(2), new Symbol("alpha")), DDTB_UJ);
+        processIntegral("T", tExpr, memory, F.C0, F.Times(IntegerSym.valueOf(2), ALPHA), DDTB_UJ);
 
     }
 
@@ -276,32 +275,9 @@ public class Application {
             public IExpr apply(IExpr iExpr) {
                 if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
                     IExpr subIntegrPart = iExpr.getAt(1);
-                    IExpr prepared = ASTUtils.transform(subIntegrPart, new Function<IExpr, IExpr>() {
-
-                        @Override
-                        public IExpr apply(IExpr iExpr) {
-                            if (iExpr.isSymbol()) {
-                                if (U.isSame(iExpr) || V.isSame(iExpr) || DDT_U.isSame(iExpr) || DDT_V.isSame(iExpr)) {
-                                    IAST ast = F.ast(iExpr);
-                                    ast.add(diffSubject);
-                                    return ast;
-                                }
-                            }
-                            return iExpr;
-                        }
-                    });
+                    IExpr prepared = ASTUtils.transform(subIntegrPart, new Functions.SymbolToFunction(diffSubject));
                     IExpr differentiated = F.eval(F.D(prepared, diffSubject));
-                    IExpr untransformed = ASTUtils.transform(differentiated, new Function<IExpr, IExpr>() {
-                        @Override
-                        public IExpr apply(IExpr iExpr) {
-                            if (iExpr.isAST()) {
-                                if ((U.isSame(iExpr.head()) || V.isSame(iExpr.head()) || DDT_U.isSame(iExpr.head()) || DDT_V.isSame(iExpr.head())) && diffSubject.isSame(iExpr.getAt(1))) {
-                                    return iExpr.head();
-                                }
-                            }
-                            return iExpr;
-                        }
-                    });
+                    IExpr untransformed = ASTUtils.transform(differentiated, new Functions.FunctionToSymbol(diffSubject));
                     return F.Integrate(untransformed, iExpr.getAt(2));
                 }
                 return iExpr;
@@ -310,24 +286,7 @@ public class Application {
 
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", differentiated));
 
-        IExpr fullSubstituted = ASTUtils.transforms(differentiated, new Function<IExpr, IExpr>() {
-                    @Override
-                    public IExpr apply(IExpr iExpr) {
-                        if (memory.containsKey(iExpr)) {
-                            return memory.get(iExpr);
-                        }
-                        return iExpr;
-                    }
-                }, new Function<IExpr, IExpr>() {
-                    @Override
-                    public IExpr apply(IExpr iExpr) {
-                        if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
-                            IAST integralParams = F.List(iExpr.getAt(2).getAt(1), leftLimit, rightLimit);
-                            return F.Integrate(iExpr.getAt(1), integralParams);
-                        }
-                        return iExpr;
-                    }
-                }
+        IExpr fullSubstituted = ASTUtils.transforms(differentiated, new Functions.MemoryReplaceFunction(memory), new Functions.ChangeIntegralIntervalFunction(leftLimit, rightLimit)
         );
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", fullSubstituted));
 
