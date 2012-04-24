@@ -33,7 +33,7 @@ public class Application {
     public static final String DDTB_VI = "ddtbzzvi";
     public static final Symbol DDTB_UJ = new Symbol("ddtbzzuj");
     public static final Symbol DDTB_VJ = new Symbol("ddtbzzvj");
-    //    public static final Symbol B_VJ = new Symbol("ddtbzzvj");
+
     public static final Symbol B_UI = new Symbol("bzzui");
     public static final Symbol B_VI = new Symbol("bzzvi");
 
@@ -41,47 +41,6 @@ public class Application {
     public static final Symbol V = new Symbol("V");
     public static final Symbol DDT_U = new Symbol("ddtUzz");
     public static final Symbol DDT_V = new Symbol("ddtVzz");
-
-    public static final Function<IExpr, IExpr> B_FIRST_DERIV = new Function<IExpr, IExpr>() {
-        @Override
-        public IExpr apply(IExpr iExpr) {
-            if (iExpr.isSymbol()) {
-                if (iExpr.isSame(new Symbol("bzzvi"))) {
-                    return new Symbol(DDTB_VI);
-                } else if (iExpr.isSame(new Symbol("bzzui"))) {
-                    return new Symbol(DDTB_UI);
-                }
-            }
-            return iExpr;
-        }
-    };
-
-    public static final Function<IExpr, IExpr> I_TO_J_FUNCTION = new Function<IExpr, IExpr>() {
-        @Override
-        public IExpr apply(IExpr iExpr) {
-            if (iExpr.isSymbol()) {
-                Symbol symbol = (Symbol) iExpr;
-                String str = symbol.getSymbol();
-                if (str.equals("i")) {
-                    return new Symbol("j");
-                } else if (str.matches("\\w+zz\\w*i\\w*")) {
-                    return new Symbol(str.replaceAll("i", "j"));
-                }
-            }
-            return iExpr;
-        }
-    };
-
-    public static final Function<IExpr, IExpr> REMOVE_SUM_FUNCTION = new Function<IExpr, IExpr>() {
-        @Override
-        public IExpr apply(IExpr iExpr) {
-            if (F.Sum.isSame(iExpr.head())) {
-                return iExpr.getAt(1);
-            }
-            return iExpr;
-        }
-    };
-
 
     private JButton bExit;
     private JButton bCalculate;
@@ -163,12 +122,6 @@ public class Application {
         inputReplacements.put("D\\[U,t\\]", "ddtUzz");
         inputReplacements.put("Q", "THeta");
 
-//        texReplacements.put(DDTB_UI, "\\\\dot{b_\\{ui\\}}");
-//        texReplacements.put("ddtbzzuj", "\\\\dot{b_\\{uj\\}}");
-//        texReplacements.put(DDTB_VI, "\\\\dot{b_\\{vi\\}}");
-//        texReplacements.put("ddtbzzvj", "\\\\dot{b_\\{vj\\}}");
-//        texReplacements.put("ddtVzz", "\\\\dot{V}");
-//        texReplacements.put("ddtUzz", "\\\\dot{U}");
         texReplacements.put("ddt(\\wzz\\w*)", "\\\\dot{$1}");
         texReplacements.put("Uzz", "U");
         texReplacements.put("Vzz", "V");
@@ -181,12 +134,6 @@ public class Application {
         texReplacements.put("PSI", "\\\\Psi");
         texReplacements.put("nu", "\\\\nu");
         texReplacements.put("THeta", "\\\\Theta");
-
-//        texReplacements.put("ddtVzz", "\\\\dot{V}");
-//        texReplacements.put("ddtUzz", "\\\\dot{V}");
-
-//        texReplacements.put("dot\\w", "\\\\dov")
-
 
         // todo for test
         try {
@@ -261,18 +208,18 @@ public class Application {
         spLeft.addIconRow(teXIcon);
 
         // differentiations
-        IExpr ddtV = transform(vExpr, B_FIRST_DERIV);
+        IExpr ddtV = ASTUtils.transform(vExpr, Functions.B_FIRST_DERIV);
         teXIcon = TexUtils.getIcon("ddtVzz=", ddtV);
         memory.put(DDT_V, ddtV);
         spLeft.addIconRow(teXIcon);
 
-        IExpr ddtU = transform(uExpr, B_FIRST_DERIV);
+        IExpr ddtU = ASTUtils.transform(uExpr, Functions.B_FIRST_DERIV);
         teXIcon = TexUtils.getIcon("ddtUzz=", ddtU);
         memory.put(DDT_U, ddtU);
         spLeft.addIconRow(teXIcon);
 
         // partial differentiations
-        IExpr ddtUieqj = transforms(ddtU, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr ddtUieqj = ASTUtils.transforms(ddtU, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr ddtbujddtU = F.eval(F.D, ddtUieqj, DDTB_UJ);
         memory.put(F.D(DDT_U, DDTB_UJ), ddtbujddtU);
         IExpr ddtbvjddtU = F.eval(F.D, ddtUieqj, DDTB_VJ);
@@ -280,7 +227,7 @@ public class Application {
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzuj}}=", ddtbujddtU));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtU));
 
-        IExpr ddtVieqj = transforms(ddtV, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr ddtVieqj = ASTUtils.transforms(ddtV, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr ddtbujddtV = F.eval(F.D, ddtVieqj, DDTB_UJ);
         memory.put(F.D(DDT_V, DDTB_UJ), ddtbujddtV);
         IExpr ddtbvjddtV = F.eval(F.D, ddtVieqj, DDTB_VJ);
@@ -288,7 +235,7 @@ public class Application {
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzuj}}=", ddtbujddtV));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtV));
 
-        IExpr Uieqj = transforms(uExpr, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr Uieqj = ASTUtils.transforms(uExpr, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr ddtbujUzz = F.eval(F.D, Uieqj, DDTB_UJ);
         memory.put(F.D(U, DDTB_UJ), ddtbujUzz);
         IExpr ddtbvjUzz = F.eval(F.D, Uieqj, DDTB_VJ);
@@ -296,7 +243,7 @@ public class Application {
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzuj}}=", ddtbujUzz));
         spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzvj}}=", ddtbvjUzz));
 
-        IExpr Vieqj = transforms(vExpr, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr Vieqj = ASTUtils.transforms(vExpr, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr ddtbujVzz = F.eval(F.D, Vieqj, DDTB_UJ);
         memory.put(F.D(V, DDTB_UJ), ddtbujVzz);
         IExpr ddtbvjVzz = F.eval(F.D, Vieqj, DDTB_VJ);
@@ -324,12 +271,12 @@ public class Application {
 
     private IExpr processIntegral(String key, IExpr expr, final Map<IExpr, IExpr> memory, final IExpr leftLimit, final IExpr rightLimit, final Symbol diffSubject) {
 
-        IExpr differentiated = transform(expr, new Function<IExpr, IExpr>() {
+        IExpr differentiated = ASTUtils.transform(expr, new Function<IExpr, IExpr>() {
             @Override
             public IExpr apply(IExpr iExpr) {
                 if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
                     IExpr subIntegrPart = iExpr.getAt(1);
-                    IExpr prepared = transform(subIntegrPart, new Function<IExpr, IExpr>() {
+                    IExpr prepared = ASTUtils.transform(subIntegrPart, new Function<IExpr, IExpr>() {
 
                         @Override
                         public IExpr apply(IExpr iExpr) {
@@ -343,10 +290,8 @@ public class Application {
                             return iExpr;
                         }
                     });
-                    spCenter.addIconRow(TexUtils.getIcon("before diff=", prepared));
                     IExpr differentiated = F.eval(F.D(prepared, diffSubject));
-                    spCenter.addIconRow(TexUtils.getIcon("after diff=", differentiated));
-                    IExpr untransformed = transform(differentiated, new Function<IExpr, IExpr>() {
+                    IExpr untransformed = ASTUtils.transform(differentiated, new Function<IExpr, IExpr>() {
                         @Override
                         public IExpr apply(IExpr iExpr) {
                             if (iExpr.isAST()) {
@@ -365,7 +310,7 @@ public class Application {
 
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", differentiated));
 
-        IExpr fullSubstituted = transforms(differentiated, new Function<IExpr, IExpr>() {
+        IExpr fullSubstituted = ASTUtils.transforms(differentiated, new Function<IExpr, IExpr>() {
                     @Override
                     public IExpr apply(IExpr iExpr) {
                         if (memory.containsKey(iExpr)) {
@@ -384,7 +329,6 @@ public class Application {
                     }
                 }
         );
-        spCenter.addIconRow(TexUtils.getIcon("full substituted=", fullSubstituted));
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", fullSubstituted));
 
 //        IExpr debugEval = null; todo раскомментировать для замены на универсальный метод
@@ -398,7 +342,7 @@ public class Application {
 //
         IExpr generalSolved = F.eval(fullSubstituted);
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", generalSolved));
-        IExpr iEqjGeneralSolved = transforms(generalSolved, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr iEqjGeneralSolved = ASTUtils.transforms(generalSolved, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr iEqjResult = F.eval(iEqjGeneralSolved);
         spCenter.addIconRow(TexUtils.getIcon("i=j, \\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", iEqjResult));
 //        return F.Plus(iEqjResult, iNotJResult);
@@ -418,34 +362,6 @@ public class Application {
         // differentiations
         teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{V}=", vExpr);
         spRight.addIconRow(teXIcon);
-    }
-
-    @SafeVarargs
-    private final IExpr transforms(IExpr srcExpr, Function<IExpr, IExpr>... functions) {
-        IExpr result = srcExpr;
-        for (Function<IExpr, IExpr> function : functions) {
-            result = transform(result, function);
-        }
-        return result;
-    }
-
-    private IExpr transform(IExpr srcExpr, Function<IExpr, IExpr> function) {
-        IExpr processed = function.apply(srcExpr);
-        if (processed.isAST()) {
-            AST result = new AST();
-            result.set(0, processed.getAt(0));
-            for (IExpr expr : (AST) processed) {
-                if (expr != null) {
-                    IExpr filtered = transform(expr, function);
-                    if (filtered != null) {
-                        result.add(filtered);
-                    }
-                }
-            }
-            return result;
-        } else {
-            return processed;
-        }
     }
 
     private void renderTeX(SolvingPanel panel, String tex) {
