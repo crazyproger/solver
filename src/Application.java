@@ -17,7 +17,6 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXEnvironment;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -45,7 +44,7 @@ public class Application {
 
     public static final Function<IExpr, IExpr> B_FIRST_DERIV = new Function<IExpr, IExpr>() {
         @Override
-        public IExpr apply(@Nullable IExpr iExpr) {
+        public IExpr apply(IExpr iExpr) {
             if (iExpr.isSymbol()) {
                 if (iExpr.isSame(new Symbol("bzzvi"))) {
                     return new Symbol(DDTB_VI);
@@ -59,7 +58,7 @@ public class Application {
 
     public static final Function<IExpr, IExpr> I_TO_J_FUNCTION = new Function<IExpr, IExpr>() {
         @Override
-        public IExpr apply(@Nullable IExpr iExpr) {
+        public IExpr apply(IExpr iExpr) {
             if (iExpr.isSymbol()) {
                 Symbol symbol = (Symbol) iExpr;
                 String str = symbol.getSymbol();
@@ -75,7 +74,7 @@ public class Application {
 
     public static final Function<IExpr, IExpr> REMOVE_SUM_FUNCTION = new Function<IExpr, IExpr>() {
         @Override
-        public IExpr apply(@Nullable IExpr iExpr) {
+        public IExpr apply(IExpr iExpr) {
             if (F.Sum.isSame(iExpr.head())) {
                 return iExpr.getAt(1);
             }
@@ -251,13 +250,13 @@ public class Application {
         IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftU.getText()));
         IAST uAST = F.ast(U);
         uAST.add(B_UI);
-        memory.put(uAST, uExpr);
+        memory.put(U, uExpr);
         TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
         spLeft.addIconRow(teXIcon);
         IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftV.getText()));
         IAST vAST = F.ast(V);
         vAST.add(B_VI);
-        memory.put(vAST, vExpr);
+        memory.put(V, vExpr);
         teXIcon = TexUtils.getIcon("V=", vExpr);
         spLeft.addIconRow(teXIcon);
 
@@ -313,7 +312,7 @@ public class Application {
         IExpr omega = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfQLeft.getText()));
         memory.put(new Symbol("THeta"), omega);
 
-        processIntegral("T", tExpr, memory, F.C0, F.Times(IntegerSym.valueOf(2), new Symbol("alpha")));
+        processIntegral("T", tExpr, memory, F.C0, F.Times(IntegerSym.valueOf(2), new Symbol("alpha")), DDTB_UJ);
 
     }
 
@@ -323,7 +322,7 @@ public class Application {
         return ast;
     }
 
-    private void processIntegral(String key, IExpr expr, final Map<IExpr, IExpr> memory, final IExpr leftLimit, final IExpr rightLimit) {
+    private IExpr processIntegral(String key, IExpr expr, final Map<IExpr, IExpr> memory, final IExpr leftLimit, final IExpr rightLimit, final Symbol diffSubject) {
 
         IExpr differentiated = transform(expr, new Function<IExpr, IExpr>() {
             @Override
@@ -331,24 +330,27 @@ public class Application {
                 if (F.Integrate.isSame(iExpr.head()) && F.List.isSame(iExpr.getAt(2).head())) {
                     IExpr subIntegrPart = iExpr.getAt(1);
                     IExpr prepared = transform(subIntegrPart, new Function<IExpr, IExpr>() {
+
                         @Override
                         public IExpr apply(IExpr iExpr) {
                             if (iExpr.isSymbol()) {
                                 if (U.isSame(iExpr) || V.isSame(iExpr) || DDT_U.isSame(iExpr) || DDT_V.isSame(iExpr)) {
                                     IAST ast = F.ast(iExpr);
-                                    ast.add(DDTB_UJ);
+                                    ast.add(diffSubject);
                                     return ast;
                                 }
                             }
                             return iExpr;
                         }
                     });
-                    IExpr differentiated = F.eval(F.D(prepared, DDTB_UJ));
+                    spCenter.addIconRow(TexUtils.getIcon("before diff=", prepared));
+                    IExpr differentiated = F.eval(F.D(prepared, diffSubject));
+                    spCenter.addIconRow(TexUtils.getIcon("after diff=", differentiated));
                     IExpr untransformed = transform(differentiated, new Function<IExpr, IExpr>() {
                         @Override
                         public IExpr apply(IExpr iExpr) {
                             if (iExpr.isAST()) {
-                                if ((U.isSame(iExpr.head()) || V.isSame(iExpr.head()) || DDT_U.isSame(iExpr.head()) || DDT_V.isSame(iExpr.head())) && DDTB_UJ.isSame(iExpr.getAt(1))) {
+                                if ((U.isSame(iExpr.head()) || V.isSame(iExpr.head()) || DDT_U.isSame(iExpr.head()) || DDT_V.isSame(iExpr.head())) && diffSubject.isSame(iExpr.getAt(1))) {
                                     return iExpr.head();
                                 }
                             }
@@ -361,7 +363,7 @@ public class Application {
             }
         });
 
-        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", differentiated));
+        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", differentiated));
 
         IExpr fullSubstituted = transforms(differentiated, new Function<IExpr, IExpr>() {
                     @Override
@@ -382,18 +384,26 @@ public class Application {
                     }
                 }
         );
-        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", fullSubstituted));
+        spCenter.addIconRow(TexUtils.getIcon("full substituted=", fullSubstituted));
+        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", fullSubstituted));
 
-        IExpr debugEval = null;
-        try {
-            EVAL.fTraceEvaluation = true;
-            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        render(spCenter, debugEval);
+//        IExpr debugEval = null; todo раскомментировать для замены на универсальный метод
+//        try {
+//            EVAL.fTraceEvaluation = true;
+//            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        render(spCenter, debugEval);
+//
+        IExpr generalSolved = F.eval(fullSubstituted);
+        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", generalSolved));
+        IExpr iEqjGeneralSolved = transforms(generalSolved, REMOVE_SUM_FUNCTION, I_TO_J_FUNCTION);
+        IExpr iEqjResult = F.eval(iEqjGeneralSolved);
+        spCenter.addIconRow(TexUtils.getIcon("i=j, \\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", iEqjResult));
+//        return F.Plus(iEqjResult, iNotJResult);
+        return iEqjResult;
 
-//        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + DDTB_UJ + "}} =", F.eval(fullSubstituted)));
     }
 
     private void processRightPanel() {
