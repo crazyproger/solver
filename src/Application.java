@@ -306,7 +306,6 @@ public class Application {
         spCenter.addIconRow(TexUtils.getIcon("i=j, \\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", iEqjResult));
 //        return F.Plus(iEqjResult, iNotJResult);
         return iEqjResult;
-
     }
 
     private void processRightPanel() {
@@ -321,10 +320,6 @@ public class Application {
         // differentiations
         teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{V}=", vExpr);
         spRight.addIconRow(teXIcon);
-    }
-
-    private void renderTeX(SolvingPanel panel, String tex) {
-        panel.addIcon(TexUtils.getIcon(tex));
     }
 
     private void render(SolvingPanel panel, IExpr expr) {
