@@ -11,6 +11,7 @@ public class EditorTest {
 
     public static void main(String[] args) {
         setLAF();
+        new Application();
         F.initSymbols(null, null, false);
         Application.EVAL_ENGINE = new EvalEngine();
         Application.EVAL = new TimeConstrainedEvaluator(Application.EVAL_ENGINE, false, 360000);

@@ -300,7 +300,8 @@ public class EquationEditor extends JFrame {
         this.value = text.replaceAll("\\s", "");
         IExpr expr;
         try {
-            expr = Application.EVAL_ENGINE.parse(value);
+            String preprocessed = TexUtils.preprocessInput(value);
+            expr = Application.EVAL_ENGINE.parse(preprocessed);
         } catch (Exception e) {
             if (lastWorked != null) {
                 spResult.addIcon(lastWorked);
