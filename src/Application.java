@@ -299,22 +299,31 @@ public class Application {
         );
         spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", fullSubstituted));
 
-//        IExpr debugEval = null; todo раскомментировать для замены на универсальный метод
-//        try {
-//            EVAL.fTraceEvaluation = true;
-//            debugEval = EVAL.constrainedEval(new StringBufferWriter(), fullSubstituted);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        render(spCenter, debugEval);
-//
         IExpr generalSolved = F.eval(fullSubstituted);
-        spCenter.addIconRow(TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", generalSolved));
+        TeXIcon generalSolvedIcon = TexUtils.getIcon("\\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", generalSolved);
+        print(spCenter, fullSubstituted, generalSolvedIcon);
+
         IExpr iEqjGeneralSolved = ASTUtils.transforms(generalSolved, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr iEqjResult = F.eval(iEqjGeneralSolved);
-        spCenter.addIconRow(TexUtils.getIcon("i=j, \\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", iEqjResult));
+        TeXIcon iEqjResultIcon = TexUtils.getIcon("i=j, \\frac{\\partial{" + key + "}}{\\partial{" + diffSubject + "}} =", iEqjResult);
+        print(spCenter, iEqjGeneralSolved, iEqjResultIcon);
 //        return F.Plus(iEqjResult, iNotJResult);
         return iEqjResult;
+    }
+
+    private void print(SolvingPanel panel, IExpr expression, TeXIcon result) {
+        if (cbDebug.isSelected()) {
+            IExpr debugEval = null;
+            try {
+                EVAL.fTraceEvaluation = true;
+                debugEval = EVAL.constrainedEval(new StringBufferWriter(), expression);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            EVAL.fTraceEvaluation = false;
+            render(spCenter, debugEval);
+        }
+        panel.addIconRow(result);
     }
 
     private void processRightPanel() {
