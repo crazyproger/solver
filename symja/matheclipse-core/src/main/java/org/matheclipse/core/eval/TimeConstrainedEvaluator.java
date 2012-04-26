@@ -12,6 +12,8 @@ import org.matheclipse.core.interfaces.IExpr;
 import javax.annotation.Nullable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Run the evaluation of a given math formula <code>String</code> in a time
@@ -48,6 +50,9 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
             startRequest();
             if (fTraceEvaluation) {
                 Predicate<IExpr> matcher = new Predicate<IExpr>() {
+                    private List<IExpr> badSymbols = Arrays.asList(new IExpr[]{F.Derivative, F.Function, F.Expand,
+                            F.ExpandAll, F.FreeQ, F.Less, F.LessEqual, F.Greater, F.GreaterEqual, F.True, F.False});
+
                     @Override
                     public boolean apply(@Nullable IExpr iExpr) {
                         if (iExpr == null) {
@@ -59,7 +64,7 @@ public class TimeConstrainedEvaluator extends EvalUtilities implements Runnable 
                                 IExpr part = expr.get(i);
                                 if (part != null && part.isSymbol()) {
                                     Symbol symbol = ((Symbol) part);
-                                    if (F.Derivative.isSame(symbol) || F.Function.isSame(symbol) || F.Expand.isSame(symbol) || F.ExpandAll.isSame(symbol)|| F.FreeQ.isSame(symbol)) {
+                                    if (badSymbols.contains(symbol)) {
                                         return false;
                                     }
                                 }
