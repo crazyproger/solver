@@ -21,6 +21,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.HashMap;
@@ -151,6 +153,44 @@ public class Application {
                 getRootPanel().invalidate();
             }
         });
+        addClickListener("T", tfT);
+        addClickListener("П", tfP);
+        addClickListener("U", tfLeftU);
+        addClickListener("U", tfRightU);
+        addClickListener("V", tfLeftV);
+        addClickListener("V", tfRightV);
+        addClickListener("A_1", tfA1);
+        addClickListener("A_2", tfA2);
+        addClickListener("k_{1,0}", tfK10);
+        addClickListener("k_{1,1}", tfK11);
+        addClickListener("k_{2,1}", tfK21);
+        addClickListener("k_{2,0}", tfK20);
+        addClickListener("\\Theta", tfQLeft);
+        addClickListener("\\Theta", tfQRight);
+    }
+
+    private void addClickListener(final String name, JTextField field) {
+        field.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                runEditor(name, (JTextField) e.getSource());
+            }
+        });
+    }
+
+    private void runEditor(String name, final JTextField caller) {
+        EquationEditor editor = new EquationEditor(name, caller.getText(), new EquationEditor.ResultListener() {
+            @Override
+            public void onOk(String text) {
+                caller.setText(text);
+            }
+
+            @Override
+            public void onCancel() {
+            }
+        });
+        editor.setModal(true);
+        editor.showMe();
     }
 
     private void initEngine() {

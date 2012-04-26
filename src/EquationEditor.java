@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EquationEditor extends JFrame {
+public class EquationEditor extends JDialog {
 
     private final SolvingPanel spResult;
     private TeXIcon lastWorked;
