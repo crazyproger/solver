@@ -10,6 +10,7 @@ import javax.swing.*;
 public class EditorTest {
 
     public static void main(String[] args) {
+        setLAF();
         F.initSymbols(null, null, false);
         Application.EVAL_ENGINE = new EvalEngine();
         Application.EVAL = new TimeConstrainedEvaluator(Application.EVAL_ENGINE, false, 360000);
@@ -29,4 +30,19 @@ public class EditorTest {
         });
         equationEditor.showMe();
     }
+
+    private static void setLAF() {
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            System.exit(255);
+        }
+    }
+
 }
