@@ -38,6 +38,7 @@ public class SolvingPanel extends JPanel {
         panel.setPreferredSize(new Dimension(icon.getIconWidth(), icon.getIconHeight() + 2));
         panel.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight() + 2));
         currentRow.add(panel, LEFT_ALIGNMENT);
+        updateUI();
     }
 
     public void addRow() {
@@ -47,6 +48,7 @@ public class SolvingPanel extends JPanel {
         BoxLayout layout = new BoxLayout(currentRow, BoxLayout.X_AXIS);
         currentRow.setLayout(layout);
         add(currentRow, LEFT_ALIGNMENT);
+        updateUI();
     }
 
     @Override
