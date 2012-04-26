@@ -85,7 +85,7 @@ public class Application {
     private static JFrame frame;
     private IndexedFocusTraversalPolicy traversalPolicy;
     public static EvalEngine EVAL_ENGINE;
-    private TimeConstrainedEvaluator EVAL;
+    public static TimeConstrainedEvaluator EVAL;
     public static final float FONT_SIZE_TEX = 24;
 
     public static Map<String, String> inputReplacements = new LinkedHashMap<>();
