@@ -78,7 +78,6 @@ public class Application {
     private JPanel qRightImgPanel;
     private JTextField tfQLeft;
     private JTextField tfQRight;
-    private JTextField tfTest;
     private SolvingPanel spLeft;
     private SolvingPanel spRight;
     private SolvingPanel spCenter;
