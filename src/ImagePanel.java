@@ -10,6 +10,7 @@ import java.io.IOException;
 public class ImagePanel extends JPanel {
 
     private BufferedImage image;
+    private Icon icon;
 
     public ImagePanel(String pathname) {
         try {
@@ -20,19 +21,34 @@ public class ImagePanel extends JPanel {
         setSize();
     }
 
+    public ImagePanel(Icon icon) {
+        this.icon = icon;
+        setSize();
+    }
+
     public ImagePanel(BufferedImage image) {
         this.image = image;
         setSize();
     }
 
     private void setSize() {
-        setMinimumSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
-        setPreferredSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
-        setMaximumSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+        if (image != null) {
+            setMinimumSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+            setPreferredSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+            setMaximumSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+        } else {
+            setMinimumSize(new Dimension(this.icon.getIconWidth(), this.icon.getIconHeight()));
+            setPreferredSize(new Dimension(this.icon.getIconWidth(), this.icon.getIconHeight()));
+            setMaximumSize(new Dimension(this.icon.getIconWidth(), this.icon.getIconHeight()));
+        }
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(image, 0, 0, null);
+        if (image != null) {
+            g.drawImage(image, 0, 0, null);
+        } else {
+            icon.paintIcon(this, g, 0, 0);
+        }
     }
 }
