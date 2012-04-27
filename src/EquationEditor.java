@@ -53,35 +53,17 @@ public class EquationEditor extends JDialog {
         bAlpha = new JButton();
         bAlpha.setText("α");
         panel2.add(bAlpha, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        fXButton = new JButton();
-        fXButton.setText("f(x)");
-        panel2.add(fXButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        aIButton = new JButton();
-        aIButton.setText("A[i]");
-        panel2.add(aIButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        varButton = new JButton();
-        varButton.setText("Var");
-        panel2.add(varButton, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        ȧButton = new JButton();
-        ȧButton.setText("ȧ");
-        panel2.add(ȧButton, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bDotDeriv = new JButton();
+        bDotDeriv.setText("ȧ");
+        panel2.add(bDotDeriv, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel2.add(spacer1, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(20, 20), null, null, 0, false));
-        button4 = new JButton();
-        button4.setText("(");
-        panel2.add(button4, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bj = new JButton();
         bj.setText("j");
         panel2.add(bj, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bi = new JButton();
         bi.setText("i");
         panel2.add(bi, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        dDxButton = new JButton();
-        dDxButton.setText("d/dx");
-        panel2.add(dDxButton, new GridConstraints(8, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        button5 = new JButton();
-        button5.setText(")");
-        panel2.add(button5, new GridConstraints(8, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bPi = new JButton();
         bPi.setText("π");
         panel2.add(bPi, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -94,12 +76,12 @@ public class EquationEditor extends JDialog {
         bMu = new JButton();
         bMu.setText("μ");
         panel2.add(bMu, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        button2 = new JButton();
-        button2.setText("∫");
-        panel2.add(button2, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        button1 = new JButton();
-        button1.setText("∑");
-        panel2.add(button1, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bIntergral = new JButton();
+        bIntergral.setText("∫");
+        panel2.add(bIntergral, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bSum = new JButton();
+        bSum.setText("∑");
+        panel2.add(bSum, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bBui = new JButton();
         bBui.setText("<html>b<sub>ui</sub></html>");
         panel2.add(bBui, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -164,6 +146,21 @@ public class EquationEditor extends JDialog {
         bDot = new JButton();
         bDot.setText(".");
         panel2.add(bDot, new GridConstraints(16, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bRightBr = new JButton();
+        bRightBr.setText(")");
+        panel2.add(bRightBr, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bDeriv = new JButton();
+        bDeriv.setText("d/dx");
+        panel2.add(bDeriv, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bLeftBr = new JButton();
+        bLeftBr.setText("(");
+        panel2.add(bLeftBr, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bFunctionCall = new JButton();
+        bFunctionCall.setText("f(x)");
+        panel2.add(bFunctionCall, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bX = new JButton();
+        bX.setText("x");
+        panel2.add(bX, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         rootPanel.add(panel3, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -198,10 +195,10 @@ public class EquationEditor extends JDialog {
         void onCancel();
     }
 
-    private JButton button1;
-    private JButton button2;
+    private JButton bSum;
+    private JButton bIntergral;
     private JTextField tfMML;
-    private JButton dDxButton;
+    private JButton bDeriv;
     private JPanel pResult;
     private JPanel pName;
     private JButton cancelButton;
@@ -211,12 +208,10 @@ public class EquationEditor extends JDialog {
     private JButton bPsi;
     private JButton bAlpha;
     private JButton bTheta;
-    private JButton button4;
-    private JButton button5;
-    private JButton fXButton;
-    private JButton aIButton;
-    private JButton varButton;
-    private JButton ȧButton;
+    private JButton bLeftBr;
+    private JButton bRightBr;
+    private JButton bFunctionCall;
+    private JButton bDotDeriv;
     private JButton bPi;
     private JButton bMu;
     private JButton bVi;
@@ -242,6 +237,7 @@ public class EquationEditor extends JDialog {
     private JButton b9;
     private JButton b0;
     private JButton bDot;
+    private JButton bX;
     private String name;
     private String value;
 
@@ -293,48 +289,62 @@ public class EquationEditor extends JDialog {
             public void changedUpdate(DocumentEvent e) {
             }
         });
-        addSimpleButtonListener(b1, "1");
-        addSimpleButtonListener(b2, "2");
-        addSimpleButtonListener(b3, "3");
-        addSimpleButtonListener(b4, "4");
-        addSimpleButtonListener(b5, "5");
-        addSimpleButtonListener(b6, "6");
-        addSimpleButtonListener(b7, "7");
-        addSimpleButtonListener(b8, "8");
-        addSimpleButtonListener(b9, "9");
-        addSimpleButtonListener(b0, "0");
-        addSimpleButtonListener(bDot, ".");
+        addButtonListener(b1, "1", 0);
+        addButtonListener(b2, "2", 0);
+        addButtonListener(b3, "3", 0);
+        addButtonListener(b4, "4", 0);
+        addButtonListener(b5, "5", 0);
+        addButtonListener(b6, "6", 0);
+        addButtonListener(b7, "7", 0);
+        addButtonListener(b8, "8", 0);
+        addButtonListener(b9, "9", 0);
+        addButtonListener(b0, "0", 0);
+        addButtonListener(bDot, ".", 0);
 
-        addSimpleButtonListener(bPlus, "+");
-        addSimpleButtonListener(bMinus, "-");
-        addSimpleButtonListener(bTimes, "*");
-        addSimpleButtonListener(bFrac, "/");
-        addSimpleButtonListener(bPow, "^");
+        addButtonListener(bPlus, "+", 0);
+        addButtonListener(bMinus, "-", 0);
+        addButtonListener(bTimes, "*", 0);
+        addButtonListener(bFrac, "/", 0);
+        addButtonListener(bPow, "^", 0);
 
-        addSimpleButtonListener(bPi, "pi");
-        addSimpleButtonListener(bMu, "MU");
-        addSimpleButtonListener(bAlpha, "alpha");
-        addSimpleButtonListener(bBui, "b_ui");
-        addSimpleButtonListener(bBuj, "b_uj");
-        addSimpleButtonListener(bBvi, "b_vi");
-        addSimpleButtonListener(bBvj, "b_vj");
-        addSimpleButtonListener(bPsi, "PSI");
-        addSimpleButtonListener(bTheta, "THeta");
-        addSimpleButtonListener(bOmega, "OM");
-        addSimpleButtonListener(bVi, "NU");
-        addSimpleButtonListener(bi, "i");
-        addSimpleButtonListener(bj, "j");
+        addButtonListener(bPi, "pi", 0);
+        addButtonListener(bMu, "MU", 0);
+        addButtonListener(bAlpha, "alpha", 0);
+        addButtonListener(bBui, "b_ui", 0);
+        addButtonListener(bBuj, "b_uj", 0);
+        addButtonListener(bBvi, "b_vi", 0);
+        addButtonListener(bBvj, "b_vj", 0);
+        addButtonListener(bPsi, "PSI", 0);
+        addButtonListener(bTheta, "THeta", 0);
+        addButtonListener(bOmega, "OM", 0);
+        addButtonListener(bVi, "NU", 0);
+        addButtonListener(bi, "i", 0);
+        addButtonListener(bj, "j", 0);
+        addButtonListener(bX, "x", 0);
+
+        addButtonListener(bLeftBr, "(", 0);
+        addButtonListener(bRightBr, ")", 0);
+
+        addButtonListener(bDeriv, "D[,x]", 2);
+        addButtonListener(bFunctionCall, "[,x]", 1);
+        addButtonListener(bIntergral, "Integrate[,{x,1,2}]", 10);
+        addButtonListener(bSum, "Sum[,{i,1,2}]", 4);
+        addButtonListener(bDot, "ddtXzz", 3);
 
     }
 
-    private void addSimpleButtonListener(JButton button, final String text) {
+    private void addButtonListener(JButton button, final String text, final int positionDelta) {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int caretPosition = tfMML.getCaretPosition();
                 tfMML.setText(new StringBuilder(tfMML.getText()).insert(caretPosition, text).toString());
                 tfMML.requestFocus();
-                tfMML.setCaretPosition(caretPosition + text.length());
+                if (positionDelta == 0) {
+                    tfMML.setCaretPosition(caretPosition + text.length());
+                } else {
+                    tfMML.setCaretPosition(caretPosition + positionDelta);
+                }
             }
         });
     }
