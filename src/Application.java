@@ -137,8 +137,9 @@ public class Application {
         texReplacements.put("OM", "\\\\Omega");
         texReplacements.put("pi", "\\\\pi");
         texReplacements.put("PSI", "\\\\Psi");
-        texReplacements.put("nu", "\\\\nu");
+        texReplacements.put("NU", "\\\\nu");
         texReplacements.put("THeta", "\\\\Theta");
+        texReplacements.put("MU", "\\\\mu");
 
         try {
             calculate();
