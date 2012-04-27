@@ -246,6 +246,7 @@ public class EquationEditor extends JDialog {
         $$$setupUI$$$();
         this.value = currentValue;
         tfMML.setText(currentValue);
+        tfMML.setCaretPosition(currentValue.length());
         spResult = new SolvingPanel();
         pResult.setLayout(new BorderLayout());
         pResult.add(spResult, BorderLayout.CENTER);
