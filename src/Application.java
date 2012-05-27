@@ -232,8 +232,9 @@ public class Application {
         EVAL_ENGINE.setOutPrintStream(pout);
         final StringBufferWriter buf0 = new StringBufferWriter();
 
-        processLeftPanel();
-        processRightPanel();
+        Map<IExpr, IExpr> leftMemory = processSmallPanel(tfLeftU, tfLeftV, spLeft);
+        processT(leftMemory);
+        processSmallPanel(tfRightU, tfRightV, spRight);
 
         // use evalTrace method
 //        String testExpr = tfTest.getText();
@@ -243,29 +244,29 @@ public class Application {
         System.out.println(buf0.toString());
     }
 
-    private void processLeftPanel() {
+    private Map<IExpr, IExpr> processSmallPanel(JTextField tfU, JTextField tfV, SolvingPanel outPanel) {
         EvalEngine.set(EVAL_ENGINE);
         Map<IExpr, IExpr> memory = new HashMap<>();
 
-        IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftU.getText()));
+        IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfU.getText()));
         memory.put(U, uExpr);
         TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
-        spLeft.addIconRow(teXIcon);
-        IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfLeftV.getText()));
+        outPanel.addIconRow(teXIcon);
+        IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfV.getText()));
         memory.put(V, vExpr);
         teXIcon = TexUtils.getIcon("V=", vExpr);
-        spLeft.addIconRow(teXIcon);
+        outPanel.addIconRow(teXIcon);
 
         // differentiations
         IExpr ddtV = ASTUtils.transform(vExpr, Functions.B_FIRST_DERIV);
         teXIcon = TexUtils.getIcon("ddtVzz=", ddtV);
         memory.put(DDT_V, ddtV);
-        spLeft.addIconRow(teXIcon);
+        outPanel.addIconRow(teXIcon);
 
         IExpr ddtU = ASTUtils.transform(uExpr, Functions.B_FIRST_DERIV);
         teXIcon = TexUtils.getIcon("ddtUzz=", ddtU);
         memory.put(DDT_U, ddtU);
-        spLeft.addIconRow(teXIcon);
+        outPanel.addIconRow(teXIcon);
 
         // partial differentiations
         IExpr ddtUieqj = ASTUtils.transforms(ddtU, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
@@ -273,35 +274,37 @@ public class Application {
         memory.put(F.D(DDT_U, DDTB_UJ), ddtbujddtU);
         IExpr ddtbvjddtU = F.eval(F.D, ddtUieqj, DDTB_VJ);
         memory.put(F.D(DDT_U, DDTB_VJ), ddtbvjddtU);
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzuj}}=", ddtbujddtU));
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtU));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzuj}}=", ddtbujddtU));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtUzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtU));
 
         IExpr ddtVieqj = ASTUtils.transforms(ddtV, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr ddtbujddtV = F.eval(F.D, ddtVieqj, DDTB_UJ);
         memory.put(F.D(DDT_V, DDTB_UJ), ddtbujddtV);
         IExpr ddtbvjddtV = F.eval(F.D, ddtVieqj, DDTB_VJ);
         memory.put(F.D(DDT_V, DDTB_VJ), ddtbvjddtV);
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzuj}}=", ddtbujddtV));
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtV));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzuj}}=", ddtbujddtV));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{ddtVzz}}{\\partial{ddtbzzvj}}=", ddtbvjddtV));
 
         IExpr Uieqj = ASTUtils.transforms(uExpr, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr ddtbujUzz = F.eval(F.D, Uieqj, DDTB_UJ);
         memory.put(F.D(U, DDTB_UJ), ddtbujUzz);
         IExpr ddtbvjUzz = F.eval(F.D, Uieqj, DDTB_VJ);
         memory.put(F.D(U, DDTB_VJ), ddtbvjUzz);
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzuj}}=", ddtbujUzz));
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzvj}}=", ddtbvjUzz));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzuj}}=", ddtbujUzz));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{Uzz}}{\\partial{ddtbzzvj}}=", ddtbvjUzz));
 
         IExpr Vieqj = ASTUtils.transforms(vExpr, Functions.REMOVE_SUM_FUNCTION, Functions.I_TO_J_FUNCTION);
         IExpr ddtbujVzz = F.eval(F.D, Vieqj, DDTB_UJ);
         memory.put(F.D(V, DDTB_UJ), ddtbujVzz);
         IExpr ddtbvjVzz = F.eval(F.D, Vieqj, DDTB_VJ);
         memory.put(F.D(V, DDTB_VJ), ddtbvjVzz);
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzuj}}=", ddtbujVzz));
-        spLeft.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzvj}}=", ddtbvjVzz));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzuj}}=", ddtbujVzz));
+        outPanel.addIconRow(TexUtils.getIcon("\\frac{\\partial{Vzz}}{\\partial{ddtbzzvj}}=", ddtbvjVzz));
 
-        ///////////////////////////////
+        return memory;
+    }
 
+    private void processT(Map<IExpr, IExpr> memory) {
         IExpr tExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfT.getText()));
         spCenter.addIconRow(TexUtils.getIcon("T=", tExpr));
 
@@ -309,7 +312,6 @@ public class Application {
         memory.put(THETA, omega);
 
         processIntegral("T", tExpr, memory, F.C0, F.Times(IntegerSym.valueOf(2), ALPHA), DDTB_UJ);
-
     }
 
     private static IAST ast(IExpr first, IExpr... exprs) {
@@ -365,20 +367,6 @@ public class Application {
             render(spCenter, debugEval);
         }
         panel.addIconRow(result);
-    }
-
-    private void processRightPanel() {
-        EvalEngine.set(EVAL_ENGINE);
-        IExpr uExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfRightU.getText()));
-        TeXIcon teXIcon = TexUtils.getIcon("U=", uExpr);
-        spRight.addIconRow(teXIcon);
-        IExpr vExpr = EVAL_ENGINE.parse(TexUtils.preprocessInput(tfRightV.getText()));
-        teXIcon = TexUtils.getIcon("V=", vExpr);
-        spRight.addIconRow(teXIcon);
-
-        // differentiations
-        teXIcon = TexUtils.getIcon(TexUtils.bDotPostProcessor, "\\dot{V}=", vExpr);
-        spRight.addIconRow(teXIcon);
     }
 
     private void render(SolvingPanel panel, IExpr expr) {
