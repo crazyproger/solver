@@ -2,6 +2,7 @@ import com.google.common.base.Function;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.commons.io.FileUtils;
 import org.matheclipse.core.eval.EvalEngine;
 import org.matheclipse.core.eval.TimeConstrainedEvaluator;
 import org.matheclipse.core.expression.AST;
@@ -23,11 +24,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
+import java.util.List;
 import java.util.Timer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class Application {
 
@@ -82,6 +84,7 @@ public class Application {
     private JTextField tfQRight;
     private JButton showHideButton;
     private JCheckBox cbDebug;
+    private JButton bSave;
     private SolvingPanel spLeft;
     private SolvingPanel spRight;
     private SolvingPanel spCenter;
@@ -93,7 +96,9 @@ public class Application {
 
     public static Map<String, String> inputReplacements = new LinkedHashMap<>();
     public static Map<String, String> texReplacements = new LinkedHashMap<>();
+
     public Map<String, IExpr> globalMemory = new HashMap<>();
+    public static List<String> textBuffer = new ArrayList<>(1000);
 
 
     public Application() {
@@ -168,6 +173,27 @@ public class Application {
         addClickListener("k_{2,0}", tfK20);
         addClickListener("\\Theta", tfQLeft);
         addClickListener("\\Theta", tfQRight);
+        bSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                save();
+            }
+        });
+    }
+
+    private void save() {
+        //Create a file chooser
+        final JFileChooser fc = new JFileChooser();
+        //In response to a button click:
+        int returnVal = fc.showSaveDialog(frame);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fc.getSelectedFile();
+            try {
+                FileUtils.writeLines(selectedFile, textBuffer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void addClickListener(final String name, JTextField field) {
@@ -223,10 +249,8 @@ public class Application {
 
     private void calculate() throws Exception {
 
-        spCenter.removeAll();
-        spLeft.removeAll();
-        spRight.removeAll();
-
+        clearAll();
+        TexUtils.startCollect();
         final StringBufferWriter printBuffer = new StringBufferWriter();
         final PrintStream pout = new PrintStream(new WriterOutputStream(printBuffer));
         EVAL_ENGINE.setOutPrintStream(pout);
@@ -241,7 +265,15 @@ public class Application {
 //        final IExpr expr = EVAL.constrainedEval(buf0, testExpr, true);
 //        render(spCenter, expr);
 
+        TexUtils.stopCollect();
         System.out.println(buf0.toString());
+    }
+
+    private void clearAll() {
+        textBuffer.clear();
+        spCenter.removeAll();
+        spLeft.removeAll();
+        spRight.removeAll();
     }
 
     private Map<IExpr, IExpr> processSmallPanel(JTextField tfU, JTextField tfV, SolvingPanel outPanel) {
@@ -425,11 +457,11 @@ public class Application {
     public static void main(String[] args) {
         setLAF();
         final TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        frame.repaint();
-                    }
-                };
+            @Override
+            public void run() {
+                frame.repaint();
+            }
+        };
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -642,16 +674,19 @@ public class Application {
         final Spacer spacer2 = new Spacer();
         panel4.add(spacer2, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel8 = new JPanel();
-        panel8.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel8.setLayout(new GridLayoutManager(1, 4, new Insets(0, 0, 0, 0), -1, -1));
         rootPanel.add(panel8, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         bExit = new JButton();
         bExit.setText("Выход");
-        panel8.add(bExit, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel8.add(bExit, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
         panel8.add(spacer3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         bCalculate = new JButton();
         bCalculate.setText("Вывести");
-        panel8.add(bCalculate, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel8.add(bCalculate, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bSave = new JButton();
+        bSave.setText("Сохранить");
+        panel8.add(bSave, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel9 = new JPanel();
         panel9.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         rootPanel.add(panel9, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 500), null, 0, false));

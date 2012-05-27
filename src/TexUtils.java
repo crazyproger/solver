@@ -17,6 +17,15 @@ public class TexUtils {
             return s.replaceAll("(bzz\\w+)", "\\\\dot{$1}");
         }
     };
+    private static boolean collect;
+
+    public static void startCollect(){
+        collect = true;
+    }
+
+    public static void stopCollect(){
+        collect = false;
+    }
 
     public static String preprocessInput(String text) {
         StringBuilder result = new StringBuilder();
@@ -47,6 +56,9 @@ public class TexUtils {
 
     public static TeXIcon renderTeX(String tex) {
         String result = replaceByMap(tex, Application.texReplacements);
+        if (collect) {
+            Application.textBuffer.add(result);
+        }
         try {
             TeXFormula formula = new TeXFormula(result);
             return formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, Application.FONT_SIZE_TEX, TeXConstants.UNIT_PIXEL, 80,
