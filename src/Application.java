@@ -24,10 +24,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.PrintStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Application {
 
@@ -424,6 +424,12 @@ public class Application {
 
     public static void main(String[] args) {
         setLAF();
+        final TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        frame.repaint();
+                    }
+                };
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -436,8 +442,10 @@ public class Application {
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                 frame.setMinimumSize(new Dimension(1000, screenSize.height - 100));
                 frame.setVisible(true);
+                new Timer().schedule(task, 1000, 1000);
             }
         });
+
     }
 
 
